@@ -1,0 +1,20 @@
+/* Estilos base del sitio JBL — pendiente de desarrollo */
+
+:root {
+  --jbl-naranja: #ff6a00;
+  --jbl-negro: #111111;
+  --jbl-gris: #f4f4f4;
+  --jbl-blanco: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--jbl-negro);
+  background-color: var(--jbl-blanco);
+}

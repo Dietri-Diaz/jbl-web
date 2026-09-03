@@ -1,0 +1,25 @@
+# ---- Sistema operativo ----
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ---- Editores de código ----
+.vscode/
+.idea/
+*.code-workspace
+
+# ---- Dependencias y compilados ----
+node_modules/
+dist/
+build/
+
+# ---- Variables de entorno y credenciales ----
+.env
+.env.local
+.env.*.local
+
+# ---- Registros y temporales ----
+*.log
+*.tmp
+*.bak
+~$*

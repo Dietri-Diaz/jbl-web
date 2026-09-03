@@ -1,0 +1,8 @@
+[
+  { "id": 1, "modelo": "JBL Flip 6",       "categoria": "Parlante portatil", "potencia_w": 30,  "resistencia": "IP67", "bateria_horas": 12 },
+  { "id": 2, "modelo": "JBL Charge 5",     "categoria": "Parlante portatil", "potencia_w": 40,  "resistencia": "IP67", "bateria_horas": 20 },
+  { "id": 3, "modelo": "JBL Xtreme 3",     "categoria": "Parlante portatil", "potencia_w": 100, "resistencia": "IP67", "bateria_horas": 15 },
+  { "id": 4, "modelo": "JBL Boombox 3",    "categoria": "Parlante portatil", "potencia_w": 180, "resistencia": "IP67", "bateria_horas": 24 },
+  { "id": 5, "modelo": "JBL PartyBox 110", "categoria": "Parlante de fiesta","potencia_w": 160, "resistencia": "IPX4", "bateria_horas": 12 },
+  { "id": 6, "modelo": "JBL Go 3",         "categoria": "Parlante compacto", "potencia_w": 4.2, "resistencia": "IP67", "bateria_horas": 5  }
+]
