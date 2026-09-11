@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Catálogo de Productos | JBL Store</title>
+  <meta name="description" content="Explora el catálogo completo de productos JBL: parlantes portátiles, audífonos, barras de sonido, parlantes para fiestas y accesorios. Encuentra el equipo de audio ideal para ti.">
+
+  <!-- Estilos base del equipo (variables CSS, reset) -->
+  <link rel="stylesheet" href="css/estilos.css">
+
+  <!-- Estilos del catálogo -->
+  <link rel="stylesheet" href="css/catalogo.css">
+</head>
+
+<body class="catalogo-body">
+
+  <!-- ════════════════════════════════════════
+       HEADER MÍNIMO
+       (Se reutilizará o reemplazará cuando feature/pagina-inicio
+        implemente el header/navbar definitivo del proyecto)
+       ════════════════════════════════════════ -->
+  <header class="cat-header" role="banner">
+    <div class="cat-header__inner">
+
+      <!-- Logo JBL -->
+      <a href="index.html" class="cat-header__logo" aria-label="JBL Store — Ir al inicio">
+        <span class="cat-header__logo-badge">JBL</span>
+        <span class="cat-header__tagline">Store</span>
+      </a>
+
+      <!-- Navegación principal -->
+      <nav aria-label="Navegación principal">
+        <ul class="cat-header__nav">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="catalogo.html" class="activo" aria-current="page">Catálogo</a></li>
+        </ul>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════
+       HERO DEL CATÁLOGO
+       ════════════════════════════════════════ -->
+  <section class="cat-hero" aria-labelledby="cat-hero-titulo">
+    <h1 id="cat-hero-titulo" class="cat-hero__titulo">
+      Catálogo de Productos <span>JBL</span>
+    </h1>
+    <p class="cat-hero__subtitulo">
+      Descubre toda la línea de audio JBL: parlantes, audífonos, barras de sonido y accesorios. Calidad de sonido profesional para cada momento.
+    </p>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       BARRA DE CONTROLES
+       (Buscador + Filtros + Ordenamiento)
+       ════════════════════════════════════════ -->
+  <section class="cat-controles" aria-label="Controles del catálogo">
+    <div class="cat-controles__inner">
+
+      <!-- Buscador -->
+      <div class="cat-buscador" role="search">
+        <span class="cat-buscador__icono" aria-hidden="true">🔍</span>
+        <label for="cat-input-busqueda" class="sr-only">Buscar productos</label>
+        <input
+          type="search"
+          id="cat-input-busqueda"
+          class="cat-buscador__input"
+          placeholder="Buscar por nombre, categoría o descripción..."
+          autocomplete="off"
+          aria-label="Buscar productos JBL"
+        >
+      </div>
+
+      <!-- Filtros por categoría -->
+      <div class="cat-filtros" role="group" aria-label="Filtrar por categoría">
+        <button
+          class="cat-filtros__btn activo"
+          data-categoria="Todos"
+          aria-pressed="true"
+          id="filtro-todos"
+        >Todos</button>
+
+        <button
+          class="cat-filtros__btn"
+          data-categoria="Parlantes portátiles"
+          aria-pressed="false"
+          id="filtro-parlantes-portatiles"
+        >Parlantes portátiles</button>
+
+        <button
+          class="cat-filtros__btn"
+          data-categoria="Audífonos"
+          aria-pressed="false"
+          id="filtro-audifonos"
+        >Audífonos</button>
+
+        <button
+          class="cat-filtros__btn"
+          data-categoria="Barras de sonido"
+          aria-pressed="false"
+          id="filtro-barras"
+        >Barras de sonido</button>
+
+        <button
+          class="cat-filtros__btn"
+          data-categoria="Parlantes para fiestas"
+          aria-pressed="false"
+          id="filtro-parlantes-fiestas"
+        >Parlantes para fiestas</button>
+
+        <button
+          class="cat-filtros__btn"
+          data-categoria="Accesorios"
+          aria-pressed="false"
+          id="filtro-accesorios"
+        >Accesorios</button>
+      </div>
+
+      <!-- Selector de ordenamiento -->
+      <div class="cat-orden">
+        <label for="cat-select-orden" class="cat-orden__label">Ordenar:</label>
+        <select
+          id="cat-select-orden"
+          class="cat-orden__select"
+          aria-label="Ordenar productos"
+        >
+          <option value="relevancia">Relevancia</option>
+          <option value="precio-asc">Precio: menor a mayor</option>
+          <option value="precio-desc">Precio: mayor a menor</option>
+          <option value="nombre-az">Nombre: A → Z</option>
+          <option value="nombre-za">Nombre: Z → A</option>
+        </select>
+      </div>
+
+    </div><!-- /cat-controles__inner -->
+  </section>
+
+  <!-- ════════════════════════════════════════
+       ÁREA PRINCIPAL DEL CATÁLOGO
+       ════════════════════════════════════════ -->
+  <main class="cat-main" id="catalogo-principal" aria-label="Catálogo de productos">
+
+    <!-- Contador de resultados -->
+    <p id="cat-contador-info" class="cat-resultados-info" aria-live="polite"></p>
+
+    <!-- Estado: Cargando -->
+    <div id="cat-cargando" class="cat-cargando" role="status" aria-label="Cargando productos">
+      <div class="cat-cargando__spinner" aria-hidden="true"></div>
+      <p class="cat-cargando__texto">Cargando productos JBL...</p>
+    </div>
+
+    <!-- Estado: Sin resultados -->
+    <div
+      id="cat-sin-resultados"
+      class="cat-sin-resultados"
+      role="alert"
+      aria-live="assertive"
+    >
+      <span class="cat-sin-resultados__icono" aria-hidden="true">🔇</span>
+      <p class="cat-sin-resultados__titulo">No se encontraron productos</p>
+      <p class="cat-sin-resultados__subtitulo">Intenta con otras palabras o cambia los filtros.</p>
+      <button
+        id="cat-btn-reset"
+        class="cat-sin-resultados__btn-reset"
+        aria-label="Limpiar todos los filtros y ver todos los productos"
+      >
+        Limpiar filtros
+      </button>
+    </div>
+
+    <!-- Grid de productos (se rellena con JavaScript) -->
+    <div
+      id="cat-grid"
+      class="cat-grid"
+      role="list"
+      aria-label="Lista de productos JBL"
+    ></div>
+
+  </main>
+
+  <!-- ════════════════════════════════════════
+       MODAL DE DETALLES DEL PRODUCTO
+       ════════════════════════════════════════ -->
+  <div
+    id="cat-modal"
+    class="cat-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cat-modal-nombre"
+    aria-describedby="cat-modal-descripcion"
+  >
+    <!-- Overlay para cerrar haciendo clic fuera -->
+    <div id="cat-modal-overlay" class="cat-modal__overlay" aria-hidden="true"></div>
+
+    <!-- Caja del modal -->
+    <div class="cat-modal__caja">
+
+      <!-- Botón cerrar -->
+      <button
+        id="cat-btn-cerrar-modal"
+        class="cat-modal__btn-cerrar"
+        aria-label="Cerrar detalles del producto"
+        title="Cerrar"
+      >✕</button>
+
+      <!-- Imagen del producto -->
+      <div class="cat-modal__imagen-wrap">
+        <img
+          id="cat-modal-imagen"
+          class="cat-modal__imagen"
+          src=""
+          alt=""
+          loading="lazy"
+        >
+      </div>
+
+      <!-- Información del producto -->
+      <div class="cat-modal__info">
+        <p id="cat-modal-categoria" class="cat-modal__categoria"></p>
+        <h2 id="cat-modal-nombre" class="cat-modal__nombre"></h2>
+        <p id="cat-modal-precio" class="cat-modal__precio"></p>
+        <p id="cat-modal-descripcion" class="cat-modal__descripcion"></p>
+
+        <p class="cat-modal__caracteristicas-titulo">Características principales</p>
+        <ul id="cat-modal-caracteristicas" class="cat-modal__lista" aria-label="Características del producto"></ul>
+      </div>
+
+    </div><!-- /cat-modal__caja -->
+  </div><!-- /cat-modal -->
+
+  <!-- ════════════════════════════════════════
+       FOOTER MÍNIMO
+       (Será reemplazado por el footer definitivo
+        de feature/pagina-inicio cuando se integre)
+       ════════════════════════════════════════ -->
+  <footer class="cat-footer" role="contentinfo">
+    <p>
+      &copy; 2025 <strong>JBL Store</strong> — Proyecto académico.
+      <a href="index.html">Volver al inicio</a>
+    </p>
+    <p style="margin-top:0.4rem; font-size:0.73rem;">
+      ⚠️ Las imágenes de productos son placeholders temporales.
+      Rutas a reemplazar: <code>assets/img/jbl-*.jpg</code>
+    </p>
+  </footer>
+
+  <!-- Script principal del sitio (del equipo) -->
+  <script src="js/main.js"></script>
+
+  <!-- Script del catálogo (esta rama) -->
+  <script src="js/catalogo.js"></script>
+
+</body>
+</html>

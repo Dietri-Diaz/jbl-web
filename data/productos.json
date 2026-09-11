@@ -1,8 +1,402 @@
 [
-  { "id": 1, "modelo": "JBL Flip 6",       "categoria": "Parlante portatil", "potencia_w": 30,  "resistencia": "IP67", "bateria_horas": 12 },
-  { "id": 2, "modelo": "JBL Charge 5",     "categoria": "Parlante portatil", "potencia_w": 40,  "resistencia": "IP67", "bateria_horas": 20 },
-  { "id": 3, "modelo": "JBL Xtreme 3",     "categoria": "Parlante portatil", "potencia_w": 100, "resistencia": "IP67", "bateria_horas": 15 },
-  { "id": 4, "modelo": "JBL Boombox 3",    "categoria": "Parlante portatil", "potencia_w": 180, "resistencia": "IP67", "bateria_horas": 24 },
-  { "id": 5, "modelo": "JBL PartyBox 110", "categoria": "Parlante de fiesta","potencia_w": 160, "resistencia": "IPX4", "bateria_horas": 12 },
-  { "id": 6, "modelo": "JBL Go 3",         "categoria": "Parlante compacto", "potencia_w": 4.2, "resistencia": "IP67", "bateria_horas": 5  }
+  {
+    "id": 1,
+    "nombre": "JBL Flip 6",
+    "modelo": "JBL Flip 6",
+    "categoria": "Parlantes portátiles",
+    "precio": 399.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-flip-6.jpg",
+    "descripcion": "Parlante portátil con sonido potente y resistencia al agua IP67. Ideal para llevar a cualquier lugar.",
+    "caracteristicas": [
+      "30 W de potencia",
+      "Resistencia al agua IP67",
+      "12 horas de batería",
+      "Conexión Bluetooth 5.1",
+      "Compatible con PartyBoost"
+    ],
+    "potencia_w": 30,
+    "resistencia": "IP67",
+    "bateria_horas": 12
+  },
+  {
+    "id": 2,
+    "nombre": "JBL Charge 5",
+    "modelo": "JBL Charge 5",
+    "categoria": "Parlantes portátiles",
+    "precio": 699.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-charge-5.jpg",
+    "descripcion": "Potente parlante portátil que además funciona como cargador para tus dispositivos móviles.",
+    "caracteristicas": [
+      "40 W de potencia",
+      "Resistencia al agua IP67",
+      "20 horas de batería",
+      "Puerto de carga USB-A",
+      "Compatible con PartyBoost"
+    ],
+    "potencia_w": 40,
+    "resistencia": "IP67",
+    "bateria_horas": 20
+  },
+  {
+    "id": 3,
+    "nombre": "JBL Xtreme 3",
+    "modelo": "JBL Xtreme 3",
+    "categoria": "Parlantes portátiles",
+    "precio": 1299.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-xtreme-3.jpg",
+    "descripcion": "Parlante portátil de alto rendimiento con sonido envolvente y batería de larga duración.",
+    "caracteristicas": [
+      "100 W de potencia",
+      "Resistencia al agua IP67",
+      "15 horas de batería",
+      "Correa desmontable incluida",
+      "Compatible con PartyBoost"
+    ],
+    "potencia_w": 100,
+    "resistencia": "IP67",
+    "bateria_horas": 15
+  },
+  {
+    "id": 4,
+    "nombre": "JBL Boombox 3",
+    "modelo": "JBL Boombox 3",
+    "categoria": "Parlantes portátiles",
+    "precio": 2499.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-boombox-3.jpg",
+    "descripcion": "El parlante portátil más potente de JBL con graves profundos y batería de 24 horas.",
+    "caracteristicas": [
+      "180 W de potencia",
+      "Resistencia al agua IP67",
+      "24 horas de batería",
+      "Múltiples puertos de carga",
+      "Compatible con PartyBoost"
+    ],
+    "potencia_w": 180,
+    "resistencia": "IP67",
+    "bateria_horas": 24
+  },
+  {
+    "id": 5,
+    "nombre": "JBL PartyBox 110",
+    "modelo": "JBL PartyBox 110",
+    "categoria": "Parlantes para fiestas",
+    "precio": 1899.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-partybox-110.jpg",
+    "descripcion": "Parlante para fiestas con iluminación dinámica sincronizada con la música y grave profundo.",
+    "caracteristicas": [
+      "160 W de potencia",
+      "Resistencia salpicaduras IPX4",
+      "12 horas de batería",
+      "Luces LED dinámicas integradas",
+      "Entrada para micrófono y guitarra"
+    ],
+    "potencia_w": 160,
+    "resistencia": "IPX4",
+    "bateria_horas": 12
+  },
+  {
+    "id": 6,
+    "nombre": "JBL Go 3",
+    "modelo": "JBL Go 3",
+    "categoria": "Parlantes portátiles",
+    "precio": 149.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-go-3.jpg",
+    "descripcion": "Parlante compacto y ultraportátil con sonido sorprendente para su tamaño.",
+    "caracteristicas": [
+      "4.2 W de potencia",
+      "Resistencia al agua IP67",
+      "5 horas de batería",
+      "Diseño ultacompacto",
+      "Bluetooth 5.1"
+    ],
+    "potencia_w": 4.2,
+    "resistencia": "IP67",
+    "bateria_horas": 5
+  },
+  {
+    "id": 7,
+    "nombre": "JBL Tune 510BT",
+    "modelo": "JBL Tune 510BT",
+    "categoria": "Audífonos",
+    "precio": 249.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-tune-510bt.jpg",
+    "descripcion": "Audífonos inalámbricos supraaurales con JBL Pure Bass Sound y batería de larga duración.",
+    "caracteristicas": [
+      "JBL Pure Bass Sound",
+      "40 horas de batería",
+      "Diseño plegable",
+      "Carga rápida: 5 min = 1 hora de uso",
+      "Multi-point connection"
+    ],
+    "potencia_w": null,
+    "resistencia": null,
+    "bateria_horas": 40
+  },
+  {
+    "id": 8,
+    "nombre": "JBL Tune 760NC",
+    "modelo": "JBL Tune 760NC",
+    "categoria": "Audífonos",
+    "precio": 499.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-tune-760nc.jpg",
+    "descripcion": "Audífonos inalámbricos con cancelación activa de ruido y sonido envolvente JBL Pure Bass.",
+    "caracteristicas": [
+      "Cancelación activa de ruido (ANC)",
+      "35 horas de batería con ANC",
+      "JBL Pure Bass Sound",
+      "Diseño plegable",
+      "Modo Ambient Sound"
+    ],
+    "potencia_w": null,
+    "resistencia": null,
+    "bateria_horas": 35
+  },
+  {
+    "id": 9,
+    "nombre": "JBL Live 660NC",
+    "modelo": "JBL Live 660NC",
+    "categoria": "Audífonos",
+    "precio": 699.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-live-660nc.jpg",
+    "descripcion": "Audífonos premium con cancelación de ruido adaptativa y asistente de voz integrado.",
+    "caracteristicas": [
+      "Cancelación de ruido adaptativa",
+      "50 horas de batería",
+      "Asistente de voz (Alexa / Google)",
+      "Audio espacial 3D",
+      "Multi-point connection"
+    ],
+    "potencia_w": null,
+    "resistencia": null,
+    "bateria_horas": 50
+  },
+  {
+    "id": 10,
+    "nombre": "JBL Bar 2.1 Deep Bass",
+    "modelo": "JBL Bar 2.1 Deep Bass",
+    "categoria": "Barras de sonido",
+    "precio": 1199.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-bar-2-1.jpg",
+    "descripcion": "Barra de sonido 2.1 con subwoofer inalámbrico para cine en casa con graves potentes.",
+    "caracteristicas": [
+      "300 W de potencia total",
+      "Subwoofer inalámbrico incluido",
+      "Conexión HDMI ARC",
+      "Bluetooth y óptico",
+      "Dolby Digital"
+    ],
+    "potencia_w": 300,
+    "resistencia": null,
+    "bateria_horas": null
+  },
+  {
+    "id": 11,
+    "nombre": "JBL Bar 5.0 MultiBeam",
+    "modelo": "JBL Bar 5.0 MultiBeam",
+    "categoria": "Barras de sonido",
+    "precio": 1699.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-bar-5-0.jpg",
+    "descripcion": "Barra de sonido 5.0 canales con tecnología MultiBeam para sonido envolvente virtual.",
+    "caracteristicas": [
+      "250 W de potencia",
+      "Tecnología MultiBeam",
+      "Dolby Atmos",
+      "HDMI eARC",
+      "Compatible con Alexa"
+    ],
+    "potencia_w": 250,
+    "resistencia": null,
+    "bateria_horas": null
+  },
+  {
+    "id": 12,
+    "nombre": "JBL PartyBox 310",
+    "modelo": "JBL PartyBox 310",
+    "categoria": "Parlantes para fiestas",
+    "precio": 2999.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-partybox-310.jpg",
+    "descripcion": "Parlante para fiestas de alta potencia con show de luces espectacular y sonido de calidad profesional.",
+    "caracteristicas": [
+      "240 W de potencia",
+      "Luces LED dinámicas",
+      "18 horas de batería",
+      "Entrada para micrófono y guitarra",
+      "Modos de luz personalizables"
+    ],
+    "potencia_w": 240,
+    "resistencia": "IPX4",
+    "bateria_horas": 18
+  },
+  {
+    "id": 13,
+    "nombre": "JBL PartyBox Encore Essential",
+    "modelo": "JBL PartyBox Encore Essential",
+    "categoria": "Parlantes para fiestas",
+    "precio": 899.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-partybox-encore.jpg",
+    "descripcion": "Parlante de fiesta compacto con iluminación integrada y micrófono inalámbrico incluido.",
+    "caracteristicas": [
+      "100 W de potencia",
+      "Micrófono inalámbrico incluido",
+      "Luces LED estroboscópicas",
+      "6 horas de batería",
+      "Entrada USB para reproducir música"
+    ],
+    "potencia_w": 100,
+    "resistencia": "IPX4",
+    "bateria_horas": 6
+  },
+  {
+    "id": 14,
+    "nombre": "JBL Earbuds Tune Flex",
+    "modelo": "JBL Tune Flex",
+    "categoria": "Audífonos",
+    "precio": 299.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-tune-flex.jpg",
+    "descripcion": "Audífonos intraurales inalámbricos con cancelación de ruido activa y diseño ergonómico.",
+    "caracteristicas": [
+      "Cancelación activa de ruido (ANC)",
+      "8 horas de batería (32 h con estuche)",
+      "Resistencia al agua IPX4",
+      "JBL Pure Bass Sound",
+      "4 micrófonos para llamadas"
+    ],
+    "potencia_w": null,
+    "resistencia": "IPX4",
+    "bateria_horas": 8
+  },
+  {
+    "id": 15,
+    "nombre": "JBL Club One",
+    "modelo": "JBL Club One",
+    "categoria": "Audífonos",
+    "precio": 1199.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-club-one.jpg",
+    "descripcion": "Audífonos premium de estudio con cancelación de ruido de alto rendimiento para profesionales.",
+    "caracteristicas": [
+      "Cancelación de ruido de referencia",
+      "45 horas de batería",
+      "Modo ambiente natural",
+      "Certificación Hi-Res Audio",
+      "Micrófono desmontable incluido"
+    ],
+    "potencia_w": null,
+    "resistencia": null,
+    "bateria_horas": 45
+  },
+  {
+    "id": 16,
+    "nombre": "Cable JBL de audio 3.5 mm",
+    "modelo": "JBL Cable 3.5mm",
+    "categoria": "Accesorios",
+    "precio": 49.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-cable-35mm.jpg",
+    "descripcion": "Cable auxiliar de audio 3.5 mm para conectar dispositivos a parlantes o audífonos JBL.",
+    "caracteristicas": [
+      "Longitud 1.2 m",
+      "Conector dorado 3.5 mm",
+      "Compatible con todos los dispositivos",
+      "Cable trenzado resistente",
+      "Garantía JBL"
+    ],
+    "potencia_w": null,
+    "resistencia": null,
+    "bateria_horas": null
+  },
+  {
+    "id": 17,
+    "nombre": "Estuche JBL para audífonos",
+    "modelo": "JBL Headphone Case",
+    "categoria": "Accesorios",
+    "precio": 89.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-estuche.jpg",
+    "descripcion": "Estuche rígido de viaje para guardar y transportar audífonos JBL de forma segura.",
+    "caracteristicas": [
+      "Material rígido exterior",
+      "Interior acolchado suave",
+      "Compatible con modelos Over-ear",
+      "Cierre de cremallera",
+      "Bolsillo para accesorios"
+    ],
+    "potencia_w": null,
+    "resistencia": null,
+    "bateria_horas": null
+  },
+  {
+    "id": 18,
+    "nombre": "Correa JBL para parlante",
+    "modelo": "JBL Speaker Strap",
+    "categoria": "Accesorios",
+    "precio": 69.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-correa.jpg",
+    "descripcion": "Correa de tela resistente para portar tu parlante JBL cómodamente en cualquier aventura.",
+    "caracteristicas": [
+      "Material nylon resistente",
+      "Longitud ajustable",
+      "Compatible con Flip, Charge y Xtreme",
+      "Mosquetón de seguridad",
+      "Disponible en varios colores"
+    ],
+    "potencia_w": null,
+    "resistencia": null,
+    "bateria_horas": null
+  },
+  {
+    "id": 19,
+    "nombre": "JBL Bar 9.1 True Wireless",
+    "modelo": "JBL Bar 9.1",
+    "categoria": "Barras de sonido",
+    "precio": 3999.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-bar-9-1.jpg",
+    "descripcion": "Sistema de sonido envolvente 9.1 con altavoces surround desmontables y Dolby Atmos.",
+    "caracteristicas": [
+      "820 W de potencia total",
+      "Altavoces surround desmontables",
+      "Dolby Atmos y DTS:X",
+      "HDMI eARC",
+      "Google Chromecast integrado"
+    ],
+    "potencia_w": 820,
+    "resistencia": null,
+    "bateria_horas": null
+  },
+  {
+    "id": 20,
+    "nombre": "JBL PartyBox 1000",
+    "modelo": "JBL PartyBox 1000",
+    "categoria": "Parlantes para fiestas",
+    "precio": 5999.90,
+    "moneda": "PEN",
+    "imagen": "assets/img/jbl-partybox-1000.jpg",
+    "descripcion": "El rey de los parlantes para fiestas: 1100 W de potencia y show de luces profesional.",
+    "caracteristicas": [
+      "1100 W de potencia",
+      "Show de luces LED profesional",
+      "Entrada para micrófono, guitarra y DJ",
+      "Ruedas y asa para transporte",
+      "Panel táctil para control de luces"
+    ],
+    "potencia_w": 1100,
+    "resistencia": "IPX4",
+    "bateria_horas": null
+  }
 ]
