@@ -56,22 +56,20 @@ fi
 echo ""
 
 # ---- Tus commits -----------------------------------------------------------
-echo "--> Menu movil, animaciones de entrada y contadores"
+echo "--> Menu movil, apariciones al hacer scroll y barra fija"
 cat > js/main.js <<'FIN_DE_ARCHIVO_JBL'
 /* =========================================================================
    JBL — Landing publicitaria
-   Interacciones de la página. Todo anima solo transform y opacity,
-   que son las propiedades que el navegador puede mover sin recalcular
-   el layout (por eso no se siente lento).
+   Sólo dos comportamientos: el menú en móvil y una aparición suave de los
+   bloques al hacer scroll. El resto del movimiento vive en el CSS.
    ========================================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Si el usuario pidió menos animaciones en su sistema, lo respetamos.
   const sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------------------------------------------------------------------
-     1. Barra de navegación: se vuelve sólida al bajar
+     1. La barra se vuelve sólida al bajar
      --------------------------------------------------------------------- */
   const nav = document.getElementById('nav');
 
@@ -100,93 +98,54 @@ document.addEventListener('DOMContentLoaded', () => {
     boton.setAttribute('aria-label', abierto ? 'Cerrar menú' : 'Abrir menú');
   });
 
-  // Al elegir una sección, el menú se cierra solo.
   menu.querySelectorAll('a').forEach((enlace) => {
     enlace.addEventListener('click', cerrarMenu);
   });
 
-  // Escape también lo cierra (accesibilidad de teclado).
   document.addEventListener('keydown', (evento) => {
     if (evento.key === 'Escape') cerrarMenu();
   });
 
   /* ---------------------------------------------------------------------
-     3. Aparición de los bloques al hacer scroll
-     Se usa IntersectionObserver: el navegador avisa cuando un elemento
-     entra en pantalla, sin tener que escuchar el scroll todo el tiempo.
+     3. Aparición de los bloques al entrar en pantalla
+     IntersectionObserver avisa cuando un elemento entra en el viewport,
+     sin tener que escuchar el scroll todo el tiempo.
      --------------------------------------------------------------------- */
   const elementos = document.querySelectorAll('.reveal');
 
   if (sinMovimiento) {
     elementos.forEach((el) => el.classList.add('visible'));
-  } else {
-    const observador = new IntersectionObserver((entradas) => {
-      entradas.forEach((entrada, indice) => {
-        if (!entrada.isIntersecting) return;
+    return;
+  }
 
-        // Retraso escalonado: los elementos entran en cascada, no de golpe.
-        entrada.target.style.transitionDelay = `${indice * 70}ms`;
-        entrada.target.classList.add('visible');
+  const observador = new IntersectionObserver((entradas) => {
+    entradas.forEach((entrada, indice) => {
+      if (!entrada.isIntersecting) return;
 
-        observador.unobserve(entrada.target); // se anima una sola vez
-      });
-    }, {
-      threshold: 0.15,
-      rootMargin: '0px 0px -80px 0px'
+      // Cascada corta: los elementos de un mismo bloque entran escalonados.
+      entrada.target.style.transitionDelay = `${Math.min(indice, 6) * 60}ms`;
+      entrada.target.classList.add('visible');
+
+      observador.unobserve(entrada.target);
     });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -60px 0px'
+  });
 
-    elementos.forEach((el) => observador.observe(el));
-  }
-
-  /* ---------------------------------------------------------------------
-     4. Contadores del hero (180 W, 24 h)
-     --------------------------------------------------------------------- */
-  const contadores = document.querySelectorAll('[data-contador]');
-
-  const animarContador = (elemento) => {
-    const destino = Number(elemento.dataset.contador);
-    const duracion = 1100;
-    const inicio = performance.now();
-
-    const paso = (ahora) => {
-      const avance = Math.min((ahora - inicio) / duracion, 1);
-      // Curva de salida: rápido al principio, suave al final.
-      const suavizado = 1 - Math.pow(1 - avance, 3);
-
-      elemento.textContent = Math.round(destino * suavizado);
-
-      if (avance < 1) requestAnimationFrame(paso);
-    };
-
-    requestAnimationFrame(paso);
-  };
-
-  if (sinMovimiento) {
-    contadores.forEach((el) => { el.textContent = el.dataset.contador; });
-  } else {
-    const observadorNumeros = new IntersectionObserver((entradas) => {
-      entradas.forEach((entrada) => {
-        if (!entrada.isIntersecting) return;
-        animarContador(entrada.target);
-        observadorNumeros.unobserve(entrada.target);
-      });
-    }, { threshold: 0.5 });
-
-    contadores.forEach((el) => observadorNumeros.observe(el));
-  }
+  elementos.forEach((el) => observador.observe(el));
 
 });
 FIN_DE_ARCHIVO_JBL
 git add js/main.js
-git commit -m 'feat: agrega el menu movil, las animaciones y los contadores'
+git commit -m 'feat: agrega el menu movil y las apariciones al hacer scroll'
 echo ""
 echo "--> Correccion: la pagina se veia en negro sin JavaScript"
 cat > css/estilos.css <<'FIN_DE_ARCHIVO_JBL'
 /* =========================================================================
    JBL — Landing publicitaria
-   Sistema de diseño: dark audio + un solo acento (naranja de marca).
-   Estilo: minimalismo exagerado (tipografía enorme, mucho aire).
-   Generado con ui-ux-pro-max; ver docs/design-system/jbl-landing/
+   Fondo oscuro con un solo color de acento. Las fotografías mandan; el
+   movimiento se limita a una aparición suave al hacer scroll.
    ========================================================================= */
 
 /* ------------------------------ 1. TOKENS ------------------------------ */
@@ -194,44 +153,44 @@ cat > css/estilos.css <<'FIN_DE_ARCHIVO_JBL'
 :root {
   /* Color */
   --fondo:        #0a0a0b;
-  --superficie:   #121215;
-  --superficie-2: #1a1a1e;
+  --superficie:   #141417;
+  --superficie-2: #1c1c21;
   --borde:        #26262c;
-  --borde-fuerte: #34343c;
+  --borde-fuerte: #3a3a43;
 
   --tinta:        #f5f5f3;
-  --tinta-suave:  #9a9aa2;
+  --tinta-suave:  #a8a8b0;
 
-  --acento:       #ff6a00;   /* naranja JBL */
+  --acento:       #ff6a00;
   --acento-claro: #ff8c3d;
 
   /* Tipografía */
   --display: "Bebas Neue", "Arial Narrow", Impact, sans-serif;
   --texto:   "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
 
-  /* Espaciado */
-  --e-xs: 0.25rem;
-  --e-sm: 0.5rem;
-  --e-md: 1rem;
-  --e-lg: 1.5rem;
-  --e-xl: 2rem;
-  --e-2xl: 3rem;
-  --e-3xl: 4rem;
-  --e-4xl: clamp(4rem, 12vw, 9rem);
+  /* Ritmo vertical: TODAS las secciones usan el mismo valor. De ahí viene
+     la sensación de orden; mezclar separaciones es lo que descuadra. */
+  --seccion:   clamp(4.5rem, 9vw, 7.5rem);
+  --contenedor: 1200px;
+  --margen:    clamp(1.25rem, 5vw, 3rem);
 
-  /* Estructura */
-  --ancho: 1280px;
-  --margen: clamp(1.25rem, 5vw, 4rem);
-  --radio: 4px;
+  /* Escala de espaciado */
+  --e-xs: 0.35rem;
+  --e-sm: 0.75rem;
+  --e-md: 1.25rem;
+  --e-lg: 2rem;
+  --e-xl: 3rem;
+  --e-2xl: 4.5rem;
 
-  /* Movimiento: curva propia, nunca el "ease" por defecto */
+  --radio: 6px;
+
+  /* Movimiento */
   --curva: cubic-bezier(0.22, 1, 0.36, 1);
   --rapido: 180ms;
-  --medio: 300ms;
+  --medio: 320ms;
 
-  /* Capas */
-  --z-fondo: 10;
-  --z-contenido: 20;
+  --z-fondo: 1;
+  --z-contenido: 10;
   --z-nav: 30;
 
   color-scheme: dark;
@@ -240,11 +199,11 @@ cat > css/estilos.css <<'FIN_DE_ARCHIVO_JBL'
 /* ------------------------------ 2. BASE ------------------------------ */
 
 *, *::before, *::after { box-sizing: border-box; }
-
 * { margin: 0; padding: 0; }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -254,24 +213,17 @@ body {
   font-family: var(--texto);
   font-size: 1.0625rem;
   line-height: 1.65;
-  font-weight: 400;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-img, svg { display: block; max-width: 100%; }
-
+img { display: block; max-width: 100%; height: auto; }
+svg { display: block; }
 a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
 
-/* El sprite guarda los símbolos SVG; no debe ocupar espacio ni verse. */
-.sprite {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 
-/* Foco visible y consistente en todo lo navegable por teclado */
 :focus-visible {
   outline: 2px solid var(--acento);
   outline-offset: 3px;
@@ -291,40 +243,65 @@ a { color: inherit; text-decoration: none; }
 }
 .salto:focus { top: var(--e-md); }
 
-/* ------------------------------ 3. PIEZAS COMUNES ------------------------------ */
+/* ------------------------------ 3. ESTRUCTURA ------------------------------ */
+
+/* Un único ancho de contenedor para toda la página: así los bordes de
+   cada sección caen siempre en la misma línea vertical. */
+.contenedor {
+  width: 100%;
+  max-width: var(--contenedor);
+  margin-inline: auto;
+  padding-inline: var(--margen);
+}
+
+.seccion { padding-block: var(--seccion); }
+
+.cabecera {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-sm);
+  max-width: 46ch;
+  margin-bottom: var(--e-2xl);
+}
+.cabecera__texto {
+  color: var(--tinta-suave);
+  text-wrap: pretty;
+}
+
+/* ------------------------------ 4. TIPOGRAFÍA ------------------------------ */
 
 .etiqueta {
-  font-family: var(--texto);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--tinta-suave);
+  color: var(--acento);
 }
 
 .titulo {
   font-family: var(--display);
-  font-size: clamp(3rem, 9vw, 7.5rem);
-  line-height: 0.88;
+  font-size: clamp(2.75rem, 6.5vw, 5rem);
+  line-height: 0.92;
   letter-spacing: 0.01em;
   text-transform: uppercase;
   text-wrap: balance;
 }
 
-.seccion__cabeza {
+.acento { color: var(--acento); }
+
+/* ------------------------------ 5. BOTONES ------------------------------ */
+
+.acciones {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: var(--e-md);
-  margin-bottom: var(--e-3xl);
 }
 
-/* Botones */
 .boton {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.95rem 1.6rem;
-  font-family: var(--texto);
+  padding: 0.95rem 1.7rem;
   font-size: 0.9375rem;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -332,29 +309,20 @@ a { color: inherit; text-decoration: none; }
   border: 2px solid transparent;
   cursor: pointer;
   transition: background-color var(--rapido) var(--curva),
-              color var(--rapido) var(--curva),
-              border-color var(--rapido) var(--curva);
+              border-color var(--rapido) var(--curva),
+              color var(--rapido) var(--curva);
 }
 
-.boton--solido {
-  background: var(--acento);
-  color: #0a0a0b;
-}
+.boton--solido { background: var(--acento); color: #0a0a0b; }
 .boton--solido:hover { background: var(--acento-claro); }
 
-.boton--linea {
-  border-color: var(--borde-fuerte);
-  color: var(--tinta);
-}
+.boton--linea { border-color: rgba(245, 245, 243, 0.35); color: var(--tinta); }
 .boton--linea:hover {
   border-color: var(--tinta);
-  background: rgba(245, 245, 243, 0.06);
+  background: rgba(245, 245, 243, 0.08);
 }
 
-.boton--grande {
-  padding: 1.15rem 2.2rem;
-  font-size: 1rem;
-}
+.boton--grande { padding: 1.15rem 2.2rem; font-size: 1rem; }
 
 .boton__ico {
   width: 18px;
@@ -368,47 +336,37 @@ a { color: inherit; text-decoration: none; }
 }
 .boton:hover .boton__ico { transform: translateX(4px); }
 
-/* Siluetas de producto */
-.figura {
-  width: 100%;
-  aspect-ratio: 2 / 1;
-  height: auto;
-}
+/* ------------------------------ 6. APARICIÓN ------------------------------ */
 
-/* Aparición al hacer scroll (la clase .visible la pone main.js).
-   Ojo: sólo se esconde si el <html> tiene la clase .js, es decir, si el
-   navegador ejecutó JavaScript. Sin JS la página se ve completa. */
+/* Sólo se esconde si el navegador ejecuta JavaScript; sin él, la página
+   se ve completa. */
 .js .reveal {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(16px);
   transition: opacity var(--medio) var(--curva),
               transform var(--medio) var(--curva);
 }
-.js .reveal.visible {
-  opacity: 1;
-  transform: none;
-}
+.js .reveal.visible { opacity: 1; transform: none; }
 
-/* ------------------------------ 4. NAVEGACIÓN ------------------------------ */
+/* ------------------------------ 7. NAVEGACIÓN ------------------------------ */
 
 .nav {
   position: fixed;
   inset: 0 0 auto 0;
   z-index: var(--z-nav);
+  border-bottom: 1px solid transparent;
   transition: background-color var(--medio) var(--curva),
               border-color var(--medio) var(--curva);
-  border-bottom: 1px solid transparent;
 }
-
 .nav.compacta {
-  background: rgba(10, 10, 11, 0.82);
+  background: rgba(10, 10, 11, 0.85);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom-color: var(--borde);
 }
 
 .nav__caja {
-  max-width: var(--ancho);
+  max-width: var(--contenedor);
   margin-inline: auto;
   padding: 1.1rem var(--margen);
   display: flex;
@@ -417,34 +375,12 @@ a { color: inherit; text-decoration: none; }
   gap: var(--e-lg);
 }
 
-.marca {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-}
-.marca__sello {
-  width: 12px;
-  height: 12px;
-  background: var(--acento);
-  border-radius: 2px;
-}
-.marca__texto {
-  font-family: var(--display);
-  font-size: 1.6rem;
-  letter-spacing: 0.06em;
-  line-height: 1;
-}
+/* El logotipo es el oficial, en SVG: escala sin perder nitidez. */
+.marca { display: inline-flex; align-items: center; }
+.marca img { width: 64px; height: auto; }
 
-.nav__menu {
-  display: flex;
-  gap: var(--e-xl);
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-.nav__menu a {
-  color: var(--tinta-suave);
-  transition: color var(--rapido) var(--curva);
-}
+.nav__menu { display: flex; gap: var(--e-xl); font-size: 0.9375rem; font-weight: 600; }
+.nav__menu a { color: var(--tinta-suave); transition: color var(--rapido) var(--curva); }
 .nav__menu a:hover { color: var(--tinta); }
 
 .nav__boton {
@@ -465,259 +401,206 @@ a { color: inherit; text-decoration: none; }
   height: 2px;
   margin-inline: auto;
   background: var(--tinta);
-  transition: transform var(--rapido) var(--curva),
-              opacity var(--rapido) var(--curva);
+  transition: transform var(--rapido) var(--curva);
 }
 .nav__boton[aria-expanded="true"] span:first-child { transform: translateY(3.5px) rotate(45deg); }
 .nav__boton[aria-expanded="true"] span:last-child  { transform: translateY(-3.5px) rotate(-45deg); }
 
-/* ------------------------------ 5. HERO ------------------------------ */
+/* ------------------------------ 8. PORTADA ------------------------------ */
 
-.hero {
+.portada {
   position: relative;
-  min-height: 100svh;
-  max-width: var(--ancho);
-  margin-inline: auto;
-  padding: clamp(7rem, 14vh, 10rem) var(--margen) var(--e-2xl);
+  min-height: min(92svh, 820px);
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--e-3xl);
+  align-items: flex-end;
+  padding-block: calc(var(--seccion) + 4rem) var(--seccion);
+  overflow: hidden;
 }
 
-/* Asimetría deliberada: el texto pesa más que la imagen */
-.hero__rejilla {
-  flex: 1;
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  align-items: center;
-  gap: var(--e-2xl);
-}
-
-.hero__texto {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--e-lg);
-}
-
-.titular {
-  font-family: var(--display);
-  font-size: clamp(3.75rem, 12.5vw, 11rem);
-  line-height: 0.82;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-}
-/* La segunda línea entra desplazada: rompe el bloque centrado de siempre */
-.titular__acento {
-  display: block;
-  color: var(--acento);
-  margin-left: clamp(0rem, 4vw, 3.5rem);
-}
-
-.hero__bajada {
-  max-width: 46ch;
-  color: var(--tinta-suave);
-  font-size: 1.125rem;
-  text-wrap: pretty;
-}
-
-.hero__acciones {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--e-md);
-  margin-top: var(--e-sm);
-}
-
-.hero__visual {
-  position: relative;
-  display: grid;
-  place-items: center;
-}
-
-.figura--hero {
-  position: relative;
-  z-index: var(--z-contenido);
-  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.8));
-}
-
-/* Ondas de sonido: sólo transform y opacity, nada que dispare layout */
-.ondas {
+/* La foto va detrás, a sangre, con un velo que garantiza el contraste. */
+.portada__fondo {
   position: absolute;
   inset: 0;
   z-index: var(--z-fondo);
-  display: grid;
-  place-items: center;
-  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
-.ondas span {
+.portada::after {
+  content: "";
   position: absolute;
-  width: min(26rem, 80%);
-  aspect-ratio: 1;
-  border: 1px solid var(--acento);
-  border-radius: 50%;
-  opacity: 0;
-  animation: pulso 4s var(--curva) infinite;
-}
-.ondas span:nth-child(2) { animation-delay: 1.33s; }
-.ondas span:nth-child(3) { animation-delay: 2.66s; }
-
-@keyframes pulso {
-  0%   { transform: scale(0.55); opacity: 0; }
-  25%  { opacity: 0.5; }
-  100% { transform: scale(1.35); opacity: 0; }
+  inset: 0;
+  z-index: var(--z-fondo);
+  background:
+    linear-gradient(to right, rgba(10,10,11,.92) 0%, rgba(10,10,11,.62) 55%, rgba(10,10,11,.45) 100%),
+    linear-gradient(to top, var(--fondo) 2%, transparent 45%);
 }
 
-.hero__pie {
+.portada__contenido {
+  position: relative;
+  z-index: var(--z-contenido);
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-md);
+}
+
+.portada__titulo {
+  font-family: var(--display);
+  font-size: clamp(3.25rem, 10vw, 8rem);
+  line-height: 0.86;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.portada__bajada {
+  max-width: 46ch;
+  font-size: 1.125rem;
+  color: var(--tinta-suave);
+  text-wrap: pretty;
+}
+
+/* ------------------------------ 9. CIFRAS ------------------------------ */
+
+.cifras {
+  border-block: 1px solid var(--borde);
+  background: var(--superficie);
+}
+.cifras__rejilla {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--e-lg);
-  padding-top: var(--e-lg);
-  border-top: 1px solid var(--borde);
+  padding-block: var(--e-xl);
 }
-
-.datos {
-  display: flex;
-  flex-wrap: wrap;
-  gap: clamp(1.5rem, 5vw, 4rem);
+.cifra { text-align: center; }
+.cifra__dato {
+  font-family: var(--display);
+  font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--acento);
 }
-.datos__item dt {
-  font-size: 0.6875rem;
+/* La unidad va debajo y más pequeña: la cifra se lee de un golpe. */
+.cifra__unidad {
+  display: block;
+  margin-top: 0.1rem;
+  font-family: var(--texto);
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--tinta-suave);
-  margin-bottom: 0.15rem;
 }
-.datos__item dd {
-  font-family: var(--display);
-  font-size: 2rem;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  font-variant-numeric: tabular-nums;
-}
-
-.hero__scroll {
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  flex-shrink: 0;
-  border: 1px solid var(--borde-fuerte);
-  border-radius: 50%;
-  color: var(--tinta-suave);
-  transition: color var(--rapido) var(--curva),
-              border-color var(--rapido) var(--curva);
-  animation: flota 2.4s var(--curva) infinite;
-}
-.hero__scroll:hover { color: var(--acento); border-color: var(--acento); }
-.hero__scroll svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-@keyframes flota {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(5px); }
-}
-
-/* ------------------------------ 6. CINTA ------------------------------ */
-
-.cinta {
-  overflow: hidden;
-  padding: var(--e-md) 0;
-  border-block: 1px solid var(--borde);
-  background: var(--superficie);
-}
-.cinta__pista {
-  display: flex;
-  align-items: center;
-  gap: var(--e-xl);
-  width: max-content;
-  animation: desplaza 26s linear infinite;
-  font-family: var(--display);
-  font-size: 1.5rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--tinta-suave);
-}
-.cinta__punto {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--acento);
-  flex-shrink: 0;
-}
-@keyframes desplaza {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* ------------------------------ 7. MANIFIESTO ------------------------------ */
-
-.manifiesto {
-  max-width: var(--ancho);
+.cifra__pie {
+  margin-top: var(--e-sm);
+  max-width: 22ch;
   margin-inline: auto;
-  padding: var(--e-4xl) var(--margen);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--tinta-suave);
+  text-wrap: pretty;
+}
+.cifras__fuente {
+  margin-top: var(--e-lg);
+  padding-top: var(--e-md);
+  border-top: 1px solid var(--borde);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--tinta-suave);
+  text-align: center;
+}
+
+/* ------------------------------ 10. MARCA ------------------------------ */
+
+.bloque-marca {
   display: flex;
   flex-direction: column;
-  gap: var(--e-xl);
+  align-items: center;
+  gap: var(--e-md);
+  text-align: center;
 }
-
-.manifiesto__texto {
-  max-width: 24ch;
+.declaracion {
+  max-width: 30ch;
   font-family: var(--display);
-  font-size: clamp(2.25rem, 6vw, 5rem);
+  font-size: clamp(2.25rem, 5.5vw, 4.25rem);
   line-height: 1.02;
   letter-spacing: 0.012em;
   text-transform: uppercase;
   text-wrap: balance;
-  font-weight: 400;
 }
-.manifiesto__texto strong {
-  color: var(--acento);
-  font-weight: 400;
-}
-.manifiesto__texto em {
-  font-style: normal;
-  color: var(--acento);
-}
-
-.manifiesto__pie {
-  display: flex;
-  align-items: center;
-  gap: var(--e-md);
-}
+.declaracion strong { color: var(--acento); font-weight: 400; }
 .firma {
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--tinta-suave);
-  flex-shrink: 0;
-}
-.manifiesto__linea {
-  flex: 1;
-  height: 1px;
-  background: var(--borde);
 }
 
 /* MARCA: estilos de la galeria -> feature/galeria-productos */
 
-/* MARCA: estilos de tecnologia, cierre y pie -> feature/tecnologia-y-pie */
+/* MARCA: estilos de tecnologia y resistencia -> feature/tecnologia-y-pie */
 
-/* ------------------------------ 12. RESPONSIVE ------------------------------ */
+/* ------------------------------ 13. CIERRE ------------------------------ */
 
-@media (max-width: 1024px) {
-  .galeria { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .tarjeta--destacada { grid-column: span 2; grid-row: auto; }
-  .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .bloque--ancho { grid-column: span 2; }
+.cierre {
+  position: relative;
+  padding-block: calc(var(--seccion) * 1.15);
+  overflow: hidden;
+}
+.cierre__fondo {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-fondo);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cierre::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-fondo);
+  background: linear-gradient(to right, rgba(10,10,11,.94) 10%, rgba(10,10,11,.55) 100%);
+}
+.cierre__contenido {
+  position: relative;
+  z-index: var(--z-contenido);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-md);
+}
+.cierre__titulo {
+  font-family: var(--display);
+  font-size: clamp(2.75rem, 8vw, 6.5rem);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+.cierre__texto {
+  max-width: 44ch;
+  font-size: 1.125rem;
+  color: var(--tinta-suave);
+  text-wrap: pretty;
+}
+
+/* MARCA: estilos del pie -> feature/tecnologia-y-pie */
+
+/* ------------------------------ 15. RESPONSIVE ------------------------------ */
+
+@media (max-width: 1000px) {
+  .galeria { grid-template-columns: repeat(2, 1fr); }
+  .pie__rejilla { grid-template-columns: repeat(2, 1fr); }
+  .pie__marca { grid-column: 1 / -1; }
+  .cifras__rejilla { grid-template-columns: repeat(2, 1fr); row-gap: var(--e-xl); }
+
+  /* En una sola columna la foto siempre va arriba, sin importar el orden
+     que tuviera en el escritorio. */
+  .duo { grid-template-columns: minmax(0, 1fr); }
+  .duo__foto { order: -1; }
 }
 
 @media (max-width: 860px) {
@@ -728,59 +611,52 @@ a { color: inherit; text-decoration: none; }
     inset: 100% var(--margen) auto var(--margen);
     flex-direction: column;
     gap: 0;
-    padding: var(--e-sm) 0;
+    padding: var(--e-xs) 0;
     background: var(--superficie);
     border: 1px solid var(--borde);
     border-radius: var(--radio);
     opacity: 0;
     transform: translateY(-8px);
+    transform-origin: top center;
     pointer-events: none;
     transition: opacity var(--rapido) var(--curva),
                 transform var(--rapido) var(--curva);
-    transform-origin: top center;
   }
-  .nav__menu.abierto {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-  }
-  .nav__menu a { padding: 0.8rem var(--e-lg); }
+  .nav__menu.abierto { opacity: 1; transform: none; pointer-events: auto; }
+  .nav__menu a { padding: 0.8rem var(--e-md); }
 
-  .hero { min-height: auto; }
-  .hero__rejilla {
-    grid-template-columns: 1fr;
-    gap: var(--e-2xl);
+  .portada { min-height: auto; padding-block: calc(var(--seccion) + 3rem) var(--seccion); }
+  .portada::after {
+    background:
+      linear-gradient(to right, rgba(10,10,11,.9) 0%, rgba(10,10,11,.72) 100%),
+      linear-gradient(to top, var(--fondo) 2%, transparent 50%);
   }
-  .hero__visual { order: -1; max-width: 30rem; }
-  .hero__pie { flex-direction: column; align-items: flex-start; }
-  .hero__scroll { display: none; }
-  .manifiesto__texto { max-width: 100%; }
 }
 
-@media (max-width: 620px) {
-  .galeria,
-  .bento { grid-template-columns: minmax(0, 1fr); }
-  .tarjeta--destacada,
-  .bloque--ancho { grid-column: span 1; }
-  .datos { gap: var(--e-lg); }
-  .datos__item dd { font-size: 1.6rem; }
+@media (max-width: 560px) {
+  .galeria { grid-template-columns: minmax(0, 1fr); }
+  .pie__rejilla { grid-template-columns: minmax(0, 1fr); }
+  .pie__marca { grid-column: auto; }
+  .cifras__rejilla { grid-template-columns: minmax(0, 1fr); }
+  .comparativa { grid-template-columns: minmax(0, 1fr); }
+  .comparativa__barra { width: 100%; }
+  .datos__fila { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }
   .boton { width: 100%; justify-content: center; }
+  .acciones { width: 100%; }
+  .declaracion { max-width: 100%; }
 }
 
-/* ------------------------------ 13. MOVIMIENTO REDUCIDO ------------------------------ */
+/* ------------------------------ 16. MOVIMIENTO REDUCIDO ------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-
   .js .reveal { opacity: 1; transform: none; }
-  .cinta__pista { animation: none; }
-  .ondas { display: none; }
+  .tarjeta:hover .tarjeta__foto img { transform: none; }
 }
 FIN_DE_ARCHIVO_JBL
 cat > index.html <<'FIN_DE_ARCHIVO_JBL'
@@ -791,12 +667,13 @@ cat > index.html <<'FIN_DE_ARCHIVO_JBL'
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>JBL — El sonido que se siente</title>
-  <meta name="description" content="JBL lleva casi 80 años construyendo altavoces. Conoce la línea de parlantes portátiles: JBL Pro Sound, resistencia IP67 y hasta 24 horas de batería.">
+  <meta name="description" content="Conoce la línea de parlantes portátiles JBL: JBL Pro Sound, resistencia al agua y hasta 24 horas de batería. Del Go 2 de bolsillo al Boombox 3 de 180 vatios.">
   <meta name="theme-color" content="#0a0a0b">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="JBL — El sonido que se siente">
-  <meta property="og:description" content="Parlantes portátiles con JBL Pro Sound. Resistencia IP67, PartyBoost y hasta 24 horas de batería.">
+  <meta property="og:description" content="Parlantes portátiles con JBL Pro Sound. Del Go 2 de bolsillo al Boombox 3 de 180 vatios.">
+  <meta property="og:image" content="assets/img/hero-marca.jpg">
   <meta property="og:locale" content="es_PE">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -804,72 +681,34 @@ cat > index.html <<'FIN_DE_ARCHIVO_JBL'
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/estilos.css">
 
-  <!-- Marca que JavaScript está activo. Las animaciones de entrada sólo se
-       aplican si existe esta clase: sin JS la página se ve completa. -->
+  <!-- Marca que JavaScript está activo. Las apariciones al hacer scroll sólo
+       se aplican si existe esta clase: sin JS la página se ve completa. -->
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
 <a class="salto" href="#contenido">Saltar al contenido</a>
 
-<!-- =========================================================
-     Sprite de iconos y siluetas. Se define una sola vez aquí y
-     se reutiliza con <use href="#id"> para no repetir los SVG.
-     ========================================================= -->
+<!-- Iconos de trazo, estilo Lucide. Se definen una vez y se reutilizan. -->
 <svg class="sprite" aria-hidden="true" focusable="false">
-  <defs>
-    <pattern id="rejilla" width="7" height="7" patternUnits="userSpaceOnUse">
-      <rect width="7" height="7" fill="none"/>
-      <circle cx="3.5" cy="3.5" r="1.2" fill="#4a4a56" fill-opacity=".55"/>
-    </pattern>
-    <!-- El cilindro está acostado, así que la luz cae de arriba abajo -->
-    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#3a3a44"/>
-      <stop offset="0.28" stop-color="#26262d"/>
-      <stop offset="0.62" stop-color="#141418"/>
-      <stop offset="1" stop-color="#0c0c0f"/>
-    </linearGradient>
-    <!-- Brillo especular sobre la parte alta del cuerpo -->
-    <linearGradient id="brillo" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff" stop-opacity=".14"/>
-      <stop offset="0.34" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-  </defs>
-
-  <!-- Silueta: parlante cilíndrico (Flip, Charge, Xtreme) -->
-  <symbol id="fig-cilindro" viewBox="0 0 440 220">
-    <ellipse cx="52" cy="110" rx="34" ry="96" fill="#24242b"/>
-    <rect x="52" y="14" width="336" height="192" fill="url(#metal)"/>
-    <rect x="52" y="14" width="336" height="192" fill="url(#rejilla)"/>
-    <rect x="52" y="14" width="336" height="192" fill="url(#brillo)"/>
-    <ellipse cx="388" cy="110" rx="34" ry="96" fill="#0b0b0d" stroke="#ff6a00" stroke-width="8"/>
-    <ellipse cx="388" cy="110" rx="17" ry="50" fill="none" stroke="#ff6a00" stroke-width="2.5" opacity=".4"/>
-  </symbol>
-
-
-
-
-  <!-- Iconos de interfaz (trazo, estilo Lucide) -->
-  <symbol id="ico-flecha" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
-  <symbol id="ico-abajo" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
-
-  <!-- MARCA: siluetas de los parlantes -> feature/galeria-productos -->
-
   <!-- MARCA: iconos de tecnologia -> feature/tecnologia-y-pie -->
+  <symbol id="ico-flecha" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="ico-externo" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></symbol>
 </svg>
+
+<!-- MARCA: logotipos de redes -> feature/tecnologia-y-pie -->
 
 <!-- ================= NAVEGACIÓN ================= -->
 <header class="nav" id="nav">
   <div class="nav__caja">
     <a class="marca" href="#inicio" aria-label="JBL, ir al inicio">
-      <span class="marca__sello" aria-hidden="true"></span>
-      <span class="marca__texto">JBL</span>
+      <img src="assets/img/logo-jbl.svg" alt="JBL" width="64" height="45">
     </a>
 
     <nav class="nav__menu" id="menu" aria-label="Navegación principal">
-      <a href="#manifiesto">Marca</a>
-      <a href="#productos">Parlantes</a>
+      <a href="#parlantes">Parlantes</a>
       <a href="#tecnologia">Tecnología</a>
+      <a href="#resistencia">Resistencia</a>
       <a href="#contacto">Contacto</a>
     </nav>
 
@@ -882,86 +721,93 @@ cat > index.html <<'FIN_DE_ARCHIVO_JBL'
 
 <main id="contenido">
 
-  <!-- ================= HERO ================= -->
-  <section class="hero" id="inicio">
-    <div class="hero__rejilla">
-      <div class="hero__texto">
-        <p class="etiqueta reveal">Audio portátil · Desde 1946</p>
-        <h1 class="titular reveal">
-          El sonido
-          <span class="titular__acento">que se siente</span>
-        </h1>
-        <p class="hero__bajada reveal">
-          Graves que empujan el pecho, agudos que no se rompen y una carcasa que
-          aguanta la playa, la lluvia y la fiesta. Esto es JBL Pro&nbsp;Sound.
-        </p>
-        <div class="hero__acciones reveal">
-          <a class="boton boton--solido" href="#productos">
-            Ver los parlantes
-            <svg class="boton__ico" aria-hidden="true"><use href="#ico-flecha"/></svg>
-          </a>
-          <a class="boton boton--linea" href="#manifiesto">Conocer la marca</a>
-        </div>
+  <!-- ================= PORTADA ================= -->
+  <section class="portada" id="inicio">
+    <img class="portada__fondo" src="assets/img/hero-marca.jpg" alt="" aria-hidden="true">
+    <div class="contenedor portada__contenido">
+      <p class="etiqueta reveal">Audio portátil · Desde 1946</p>
+      <h1 class="portada__titulo reveal">
+        El sonido<br>
+        <span class="acento">que se siente</span>
+      </h1>
+      <p class="portada__bajada reveal">
+        Graves que empujan el pecho, agudos que no se rompen y una carcasa que
+        aguanta la playa, la lluvia y la fiesta.
+      </p>
+      <div class="acciones reveal">
+        <a class="boton boton--solido" href="#parlantes">
+          Ver los parlantes
+          <svg class="boton__ico" aria-hidden="true"><use href="#ico-flecha"/></svg>
+        </a>
+        <a class="boton boton--linea" href="#marca">Conocer la marca</a>
       </div>
-
-      <div class="hero__visual reveal">
-        <div class="ondas" aria-hidden="true">
-          <span></span><span></span><span></span>
-        </div>
-        <svg class="figura figura--hero" role="img" aria-label="Ilustración de un parlante portátil JBL">
-          <use href="#fig-cilindro"/>
-        </svg>
-      </div>
-    </div>
-
-    <div class="hero__pie">
-      <dl class="datos">
-        <div class="datos__item"><dt>Potencia máxima</dt><dd><span data-contador="180">180</span> W</dd></div>
-        <div class="datos__item"><dt>Batería</dt><dd>hasta <span data-contador="24">24</span> h</dd></div>
-        <div class="datos__item"><dt>Resistencia</dt><dd>IP67</dd></div>
-      </dl>
-      <a class="hero__scroll" href="#manifiesto" aria-label="Bajar a la siguiente sección">
-        <svg aria-hidden="true"><use href="#ico-abajo"/></svg>
-      </a>
     </div>
   </section>
 
-  <!-- ================= CINTA ================= -->
-  <div class="cinta" aria-hidden="true">
-    <div class="cinta__pista">
-      <span>JBL Pro Sound</span><span class="cinta__punto"></span>
-      <span>PartyBoost</span><span class="cinta__punto"></span>
-      <span>Resistente al agua</span><span class="cinta__punto"></span>
-      <span>Bluetooth 5.1</span><span class="cinta__punto"></span>
-      <span>JBL Pro Sound</span><span class="cinta__punto"></span>
-      <span>PartyBoost</span><span class="cinta__punto"></span>
-      <span>Resistente al agua</span><span class="cinta__punto"></span>
-      <span>Bluetooth 5.1</span><span class="cinta__punto"></span>
+  <!-- ================= CIFRAS ================= -->
+  <section class="cifras" aria-label="La marca en cifras">
+    <div class="contenedor">
+      <div class="cifras__rejilla">
+        <div class="cifra">
+          <p class="cifra__dato">100<span class="cifra__unidad">millones</span></p>
+          <p class="cifra__pie">Parlantes portátiles vendidos en el mundo</p>
+        </div>
+        <div class="cifra">
+          <p class="cifra__dato">34,2<span class="cifra__unidad">%</span></p>
+          <p class="cifra__pie">Del mercado mundial de parlantes portátiles</p>
+        </div>
+        <div class="cifra">
+          <p class="cifra__dato">5<span class="cifra__unidad">años</span></p>
+          <p class="cifra__pie">Seguidos como marca líder de la categoría</p>
+        </div>
+        <div class="cifra">
+          <p class="cifra__dato">1946</p>
+          <p class="cifra__pie">Año en que James B. Lansing fundó la marca</p>
+        </div>
+      </div>
+      <p class="cifras__fuente">
+        Cifras publicadas por Harman International en septiembre de 2019, al
+        anunciar los 100 millones de unidades en la feria IFA de Berlín.
+      </p>
     </div>
-  </div>
+  </section>
 
-  <!-- ================= MANIFIESTO ================= -->
-  <section class="manifiesto" id="manifiesto">
-    <p class="etiqueta reveal">01 — La marca</p>
-    <p class="manifiesto__texto reveal">
-      Desde <strong>1946</strong> construimos altavoces para los que no se conforman
-      con escuchar. El mismo sonido que llena estadios y salas de cine cabe hoy
-      en una mano: <em>eso</em> es lo que hace JBL.
-    </p>
-    <div class="manifiesto__pie reveal">
-      <span class="firma">James B. Lansing Sound</span>
-      <span class="manifiesto__linea" aria-hidden="true"></span>
+  <!-- ================= MARCA ================= -->
+  <section class="seccion" id="marca">
+    <div class="contenedor bloque-marca">
+      <p class="etiqueta reveal">La marca</p>
+      <p class="declaracion reveal">
+        Desde <strong>1946</strong> construimos altavoces para los que no se
+        conforman con escuchar. El mismo sonido que llena estadios y salas de
+        cine cabe hoy en una mano.
+      </p>
+      <p class="firma reveal">James B. Lansing Sound</p>
     </div>
   </section>
 
   <!-- MARCA: galeria de parlantes -> feature/galeria-productos -->
 
-  <!-- MARCA: tecnologia y cierre -> feature/tecnologia-y-pie -->
+  <!-- MARCA: tecnologia, resistencia y practicidad -> feature/tecnologia-y-pie -->
+
+  <!-- ================= CIERRE ================= -->
+  <section class="cierre" id="contacto">
+    <img class="cierre__fondo" src="assets/img/cierre.jpg" alt="" aria-hidden="true" loading="lazy">
+    <div class="contenedor cierre__contenido">
+      <h2 class="cierre__titulo reveal">El silencio<br>está sobrevalorado</h2>
+      <p class="cierre__texto reveal">
+        Encuentra el parlante que te acompaña en las tiendas autorizadas JBL
+        de todo el país.
+      </p>
+      <a class="boton boton--solido boton--grande reveal" href="#parlantes">
+        Explorar la línea completa
+        <svg class="boton__ico" aria-hidden="true"><use href="#ico-flecha"/></svg>
+      </a>
+    </div>
+  </section>
 
 </main>
 
 <!-- MARCA: pie de pagina -> feature/tecnologia-y-pie -->
-
 
 <script src="js/main.js"></script>
 </body>

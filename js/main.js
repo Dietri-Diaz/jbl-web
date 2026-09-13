@@ -6,7 +6,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------------------------------------------------------------------
-     Barra de navegación: se vuelve sólida al bajar
+     La barra se vuelve sólida al bajar
      --------------------------------------------------------------------- */
   const nav = document.getElementById('nav');
 
