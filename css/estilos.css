@@ -525,7 +525,118 @@ a { color: inherit; text-decoration: none; }
 
 /* MARCA: estilos de la galeria -> feature/galeria-productos */
 
-/* MARCA: estilos de tecnologia, cierre y pie -> feature/tecnologia-y-pie */
+/* ------------------------------ 9. TECNOLOGÍA ------------------------------ */
+
+.tecnologia {
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding: var(--e-4xl) var(--margen);
+}
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--e-md);
+}
+
+.bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: var(--e-xl);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  transition: border-color var(--medio) var(--curva),
+              background-color var(--medio) var(--curva);
+}
+.bloque:hover {
+  border-color: var(--borde-fuerte);
+  background: var(--superficie-2);
+}
+.bloque--ancho { grid-column: span 2; }
+
+.bloque__ico {
+  width: 30px;
+  height: 30px;
+  margin-bottom: var(--e-sm);
+  color: var(--acento);
+}
+.bloque h3 {
+  font-family: var(--display);
+  font-size: 1.85rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.bloque p {
+  max-width: 52ch;
+  color: var(--tinta-suave);
+  text-wrap: pretty;
+}
+
+/* ------------------------------ 10. CIERRE ------------------------------ */
+
+.cierre {
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding: var(--e-4xl) var(--margen);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-lg);
+  border-top: 1px solid var(--borde);
+}
+
+.cierre__titulo {
+  font-family: var(--display);
+  font-size: clamp(3rem, 11vw, 9rem);
+  line-height: 0.85;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+.cierre__texto {
+  max-width: 44ch;
+  color: var(--tinta-suave);
+  font-size: 1.125rem;
+  text-wrap: pretty;
+}
+
+/* ------------------------------ 11. PIE ------------------------------ */
+
+.pie {
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding: var(--e-2xl) var(--margen) var(--e-3xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-lg);
+  border-top: 1px solid var(--borde);
+}
+.pie__caja {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-md);
+}
+.pie__enlaces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-lg);
+  font-size: 0.9375rem;
+  color: var(--tinta-suave);
+}
+.pie__enlaces a { transition: color var(--rapido) var(--curva); }
+.pie__enlaces a:hover { color: var(--tinta); }
+
+.pie__aviso {
+  max-width: 62ch;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--tinta-suave);
+}
+
 
 /* ------------------------------ 12. RESPONSIVE ------------------------------ */
 

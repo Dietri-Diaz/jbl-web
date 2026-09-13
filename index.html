@@ -65,7 +65,10 @@
 
   <!-- MARCA: siluetas de los parlantes -> feature/galeria-productos -->
 
-  <!-- MARCA: iconos de tecnologia -> feature/tecnologia-y-pie -->
+  <symbol id="ico-sonido" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></symbol>
+  <symbol id="ico-agua" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5S5 13 5 15a7 7 0 0 0 7 7Z"/></symbol>
+  <symbol id="ico-bateria" viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/><path d="M6 11v2"/><path d="M10 11v2"/></symbol>
+  <symbol id="ico-enlace" viewBox="0 0 24 24"><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><circle cx="12" cy="12" r="2"/></symbol>
 </svg>
 
 <!-- ================= NAVEGACIÓN ================= -->
@@ -166,11 +169,83 @@
 
   <!-- MARCA: galeria de parlantes -> feature/galeria-productos -->
 
-  <!-- MARCA: tecnologia y cierre -> feature/tecnologia-y-pie -->
+  <!-- ================= TECNOLOGÍA ================= -->
+  <section class="tecnologia" id="tecnologia">
+    <header class="seccion__cabeza">
+      <p class="etiqueta reveal">03 — La tecnología</p>
+      <h2 class="titulo reveal">Lo que hay dentro</h2>
+    </header>
+
+    <div class="bento">
+      <article class="bloque bloque--ancho reveal">
+        <svg class="bloque__ico" aria-hidden="true"><use href="#ico-sonido"/></svg>
+        <h3>JBL Pro Sound</h3>
+        <p>
+          La misma firma sonora que se usa en estudios de grabación y estadios,
+          calibrada para un equipo que cabe en una mochila. Graves profundos sin
+          ensuciar la voz.
+        </p>
+      </article>
+
+      <article class="bloque reveal">
+        <svg class="bloque__ico" aria-hidden="true"><use href="#ico-agua"/></svg>
+        <h3>Resistencia IP67</h3>
+        <p>Polvo y agua fuera. Sumergible hasta 1 metro durante 30 minutos.</p>
+      </article>
+
+      <article class="bloque reveal">
+        <svg class="bloque__ico" aria-hidden="true"><use href="#ico-bateria"/></svg>
+        <h3>Hasta 24 horas</h3>
+        <p>Batería que aguanta el viaje de ida, la fiesta y el regreso.</p>
+      </article>
+
+      <article class="bloque bloque--ancho reveal">
+        <svg class="bloque__ico" aria-hidden="true"><use href="#ico-enlace"/></svg>
+        <h3>PartyBoost</h3>
+        <p>
+          Conecta varios parlantes compatibles y conviértelos en un solo sistema.
+          Más equipos, más presión sonora, un mismo compás.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= CIERRE ================= -->
+  <section class="cierre" id="contacto">
+    <p class="etiqueta reveal">04 — Súbele</p>
+    <h2 class="cierre__titulo reveal">
+      El silencio<br>está sobrevalorado
+    </h2>
+    <p class="cierre__texto reveal">
+      Encuentra el parlante que te acompaña en tiendas autorizadas JBL
+      de todo el país.
+    </p>
+    <a class="boton boton--solido boton--grande reveal" href="#productos">
+      Explorar la línea completa
+      <svg class="boton__ico" aria-hidden="true"><use href="#ico-flecha"/></svg>
+    </a>
+  </section>
+
 
 </main>
 
-<!-- MARCA: pie de pagina -> feature/tecnologia-y-pie -->
+<footer class="pie">
+  <div class="pie__caja">
+    <a class="marca" href="#inicio" aria-label="JBL, ir al inicio">
+      <span class="marca__sello" aria-hidden="true"></span>
+      <span class="marca__texto">JBL</span>
+    </a>
+    <nav class="pie__enlaces" aria-label="Navegación del pie">
+      <a href="#manifiesto">Marca</a>
+      <a href="#productos">Parlantes</a>
+      <a href="#tecnologia">Tecnología</a>
+    </nav>
+  </div>
+  <p class="pie__aviso">
+    Proyecto académico sin fines comerciales. Sitio no oficial.
+    JBL es una marca registrada de Harman International Industries.
+  </p>
+</footer>
 
 
 <script src="js/main.js"></script>
