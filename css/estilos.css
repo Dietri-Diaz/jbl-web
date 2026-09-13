@@ -523,6 +523,10 @@ a { color: inherit; text-decoration: none; }
   background: var(--borde);
 }
 
+/* MARCA: estilos de la galeria -> feature/galeria-productos */
+
+/* MARCA: estilos de tecnologia, cierre y pie -> feature/tecnologia-y-pie */
+
 /* ------------------------------ 12. RESPONSIVE ------------------------------ */
 
 @media (max-width: 1024px) {
