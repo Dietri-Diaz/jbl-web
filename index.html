@@ -63,7 +63,35 @@
   <symbol id="ico-flecha" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
   <symbol id="ico-abajo" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
 
-  <!-- MARCA: siluetas de los parlantes -> feature/galeria-productos -->
+  <!-- Silueta: boombox con asa (Boombox 3) -->
+  <symbol id="fig-boombox" viewBox="0 0 440 220">
+    <path d="M136 62c0-32 38-48 84-48s84 16 84 48" fill="none" stroke="#3a3a41" stroke-width="13" stroke-linecap="round"/>
+    <ellipse cx="64" cy="132" rx="30" ry="74" fill="#24242b"/>
+    <rect x="64" y="58" width="312" height="148" fill="url(#metal)"/>
+    <rect x="64" y="58" width="312" height="148" fill="url(#rejilla)"/>
+    <rect x="64" y="58" width="312" height="148" fill="url(#brillo)"/>
+    <circle cx="152" cy="132" r="42" fill="none" stroke="#3d3d47" stroke-width="3.5"/>
+    <circle cx="262" cy="132" r="42" fill="none" stroke="#3d3d47" stroke-width="3.5"/>
+    <ellipse cx="376" cy="132" rx="30" ry="74" fill="#0b0b0d" stroke="#ff6a00" stroke-width="8"/>
+  </symbol>
+  <!-- Silueta: torre de fiesta (PartyBox) -->
+  <symbol id="fig-caja" viewBox="0 0 440 220">
+    <rect x="126" y="6" width="188" height="208" rx="16" fill="url(#metal)"/>
+    <rect x="126" y="6" width="188" height="208" rx="16" fill="url(#rejilla)"/>
+    <rect x="126" y="6" width="188" height="208" rx="16" fill="url(#brillo)"/>
+    <circle cx="220" cy="76" r="52" fill="#0b0b0d" stroke="#ff6a00" stroke-width="7"/>
+    <circle cx="220" cy="76" r="11" fill="#ff6a00"/>
+    <circle cx="220" cy="166" r="34" fill="#0b0b0d" stroke="#3d3d47" stroke-width="4.5"/>
+  </symbol>
+  <!-- Silueta: parlante compacto (Go) -->
+  <symbol id="fig-compacto" viewBox="0 0 440 220">
+    <rect x="112" y="26" width="206" height="168" rx="42" fill="url(#metal)"/>
+    <rect x="112" y="26" width="206" height="168" rx="42" fill="url(#rejilla)"/>
+    <rect x="112" y="26" width="206" height="168" rx="42" fill="url(#brillo)"/>
+    <rect x="112" y="26" width="206" height="168" rx="42" fill="none" stroke="#33333c" stroke-width="5"/>
+    <rect x="192" y="150" width="46" height="13" rx="6.5" fill="#ff6a00"/>
+    <path d="M318 74c26 0 26 36 0 36" fill="none" stroke="#3a3a41" stroke-width="9" stroke-linecap="round"/>
+  </symbol>
 
   <!-- MARCA: iconos de tecnologia -> feature/tecnologia-y-pie -->
 </svg>
@@ -164,7 +192,106 @@
     </div>
   </section>
 
-  <!-- MARCA: galeria de parlantes -> feature/galeria-productos -->
+  <!-- ================= PRODUCTOS ================= -->
+  <section class="productos" id="productos">
+    <header class="seccion__cabeza">
+      <p class="etiqueta reveal">02 — Los parlantes</p>
+      <h2 class="titulo reveal">Elige tu volumen</h2>
+    </header>
+
+    <div class="galeria">
+
+      <article class="tarjeta tarjeta--destacada reveal">
+        <p class="tarjeta__num">04</p>
+        <svg class="figura" role="img" aria-label="JBL Boombox 3"><use href="#fig-boombox"/></svg>
+        <div class="tarjeta__cuerpo">
+          <p class="tarjeta__tipo">El más potente</p>
+          <h3 class="tarjeta__nombre">JBL Boombox 3</h3>
+          <p class="tarjeta__texto">
+            180 vatios y 24 horas de batería. El parlante que convierte
+            cualquier terreno en un escenario.
+          </p>
+          <ul class="specs">
+            <li><span>Potencia</span><strong>180 W</strong></li>
+            <li><span>Batería</span><strong>24 h</strong></li>
+            <li><span>Resistencia</span><strong>IP67</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tarjeta reveal">
+        <p class="tarjeta__num">01</p>
+        <svg class="figura" role="img" aria-label="JBL Flip 6"><use href="#fig-cilindro"/></svg>
+        <div class="tarjeta__cuerpo">
+          <p class="tarjeta__tipo">Portátil</p>
+          <h3 class="tarjeta__nombre">JBL Flip 6</h3>
+          <ul class="specs">
+            <li><span>Potencia</span><strong>300 W</strong></li>
+            <li><span>Batería</span><strong>12 h</strong></li>
+            <li><span>Resistencia</span><strong>IP67</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tarjeta reveal">
+        <p class="tarjeta__num">02</p>
+        <svg class="figura" role="img" aria-label="JBL Charge 5"><use href="#fig-cilindro"/></svg>
+        <div class="tarjeta__cuerpo">
+          <p class="tarjeta__tipo">Portátil · Powerbank</p>
+          <h3 class="tarjeta__nombre">JBL Charge 5</h3>
+          <ul class="specs">
+            <li><span>Potencia</span><strong>40 W</strong></li>
+            <li><span>Batería</span><strong>2 h</strong></li>
+            <li><span>Resistencia</span><strong>IP67</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tarjeta reveal">
+        <p class="tarjeta__num">03</p>
+        <svg class="figura" role="img" aria-label="JBL Xtreme 3"><use href="#fig-cilindro"/></svg>
+        <div class="tarjeta__cuerpo">
+          <p class="tarjeta__tipo">Portátil con correa</p>
+          <h3 class="tarjeta__nombre">JBL Xtreme 3</h3>
+          <ul class="specs">
+            <li><span>Potencia</span><strong>100 W</strong></li>
+            <li><span>Batería</span><strong>15 h</strong></li>
+            <li><span>Resistencia</span><strong>IP67</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tarjeta reveal">
+        <p class="tarjeta__num">05</p>
+        <svg class="figura" role="img" aria-label="JBL PartyBox 110"><use href="#fig-caja"/></svg>
+        <div class="tarjeta__cuerpo">
+          <p class="tarjeta__tipo">Fiesta · Luces</p>
+          <h3 class="tarjeta__nombre">JBL PartyBox 110</h3>
+          <ul class="specs">
+            <li><span>Potencia</span><strong>160 W</strong></li>
+            <li><span>Batería</span><strong>12 h</strong></li>
+            <li><span>Resistencia</span><strong>IPX4</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tarjeta reveal">
+        <p class="tarjeta__num">06</p>
+        <svg class="figura" role="img" aria-label="JBL Go 3"><use href="#fig-compacto"/></svg>
+        <div class="tarjeta__cuerpo">
+          <p class="tarjeta__tipo">Ultra compacto</p>
+          <h3 class="tarjeta__nombre">JBL Go 3</h3>
+          <ul class="specs">
+            <li><span>Potencia</span><strong>4.2 W</strong></li>
+            <li><span>Batería</span><strong>5 h</strong></li>
+            <li><span>Resistencia</span><strong>IP67</strong></li>
+          </ul>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
 
   <!-- MARCA: tecnologia y cierre -> feature/tecnologia-y-pie -->
 
