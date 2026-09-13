@@ -442,6 +442,87 @@ a { color: inherit; text-decoration: none; }
   50%      { transform: translateY(5px); }
 }
 
+/* ------------------------------ 6. CINTA ------------------------------ */
+
+.cinta {
+  overflow: hidden;
+  padding: var(--e-md) 0;
+  border-block: 1px solid var(--borde);
+  background: var(--superficie);
+}
+.cinta__pista {
+  display: flex;
+  align-items: center;
+  gap: var(--e-xl);
+  width: max-content;
+  animation: desplaza 26s linear infinite;
+  font-family: var(--display);
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+.cinta__punto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--acento);
+  flex-shrink: 0;
+}
+@keyframes desplaza {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ------------------------------ 7. MANIFIESTO ------------------------------ */
+
+.manifiesto {
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding: var(--e-4xl) var(--margen);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-xl);
+}
+
+.manifiesto__texto {
+  max-width: 24ch;
+  font-family: var(--display);
+  font-size: clamp(2.25rem, 6vw, 5rem);
+  line-height: 1.02;
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  font-weight: 400;
+}
+.manifiesto__texto strong {
+  color: var(--acento);
+  font-weight: 400;
+}
+.manifiesto__texto em {
+  font-style: normal;
+  color: var(--acento);
+}
+
+.manifiesto__pie {
+  display: flex;
+  align-items: center;
+  gap: var(--e-md);
+}
+.firma {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+  flex-shrink: 0;
+}
+.manifiesto__linea {
+  flex: 1;
+  height: 1px;
+  background: var(--borde);
+}
+
 /* ------------------------------ 12. RESPONSIVE ------------------------------ */
 
 @media (max-width: 1024px) {
