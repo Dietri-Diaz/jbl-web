@@ -194,13 +194,13 @@ a { color: inherit; text-decoration: none; }
 /* Aparición al hacer scroll (la clase .visible la pone main.js).
    Ojo: sólo se esconde si el <html> tiene la clase .js, es decir, si el
    navegador ejecutó JavaScript. Sin JS la página se ve completa. */
-.reveal {
+.js .reveal {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity var(--medio) var(--curva),
               transform var(--medio) var(--curva);
 }
-.reveal.visible {
+.js .reveal.visible {
   opacity: 1;
   transform: none;
 }
@@ -594,7 +594,7 @@ a { color: inherit; text-decoration: none; }
     transition-duration: 0.01ms !important;
   }
 
-  .reveal { opacity: 1; transform: none; }
+  .js .reveal { opacity: 1; transform: none; }
   .cinta__pista { animation: none; }
   .ondas { display: none; }
 }
