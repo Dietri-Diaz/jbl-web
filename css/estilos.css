@@ -560,6 +560,11 @@ a { color: inherit; text-decoration: none; }
   height: 30px;
   margin-bottom: var(--e-sm);
   color: var(--acento);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .bloque h3 {
   font-family: var(--display);
