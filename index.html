@@ -3,14 +3,180 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JBL Store | Parlantes y equipos de audio</title>
+
+  <title>JBL — El sonido que se siente</title>
+  <meta name="description" content="JBL lleva casi 80 años construyendo altavoces. Conoce la línea de parlantes portátiles: JBL Pro Sound, resistencia IP67 y hasta 24 horas de batería.">
+  <meta name="theme-color" content="#0a0a0b">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="JBL — El sonido que se siente">
+  <meta property="og:description" content="Parlantes portátiles con JBL Pro Sound. Resistencia IP67, PartyBoost y hasta 24 horas de batería.">
+  <meta property="og:locale" content="es_PE">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/estilos.css">
+
+  <!-- Marca que JavaScript está activo. Las animaciones de entrada sólo se
+       aplican si existe esta clase: sin JS la página se ve completa. -->
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
-  <!-- TODO (semana 7): cabecera con logo y navegación -->
-  <!-- TODO (semana 7): sección hero con el parlante destacado -->
-  <!-- TODO (semana 8): catálogo de parlantes -->
-  <!-- TODO (semana 9): pie de página -->
-  <script src="js/main.js"></script>
+
+<a class="salto" href="#contenido">Saltar al contenido</a>
+
+<!-- =========================================================
+     Sprite de iconos y siluetas. Se define una sola vez aquí y
+     se reutiliza con <use href="#id"> para no repetir los SVG.
+     ========================================================= -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="rejilla" width="7" height="7" patternUnits="userSpaceOnUse">
+      <rect width="7" height="7" fill="none"/>
+      <circle cx="3.5" cy="3.5" r="1.2" fill="#4a4a56" fill-opacity=".55"/>
+    </pattern>
+    <!-- El cilindro está acostado, así que la luz cae de arriba abajo -->
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a3a44"/>
+      <stop offset="0.28" stop-color="#26262d"/>
+      <stop offset="0.62" stop-color="#141418"/>
+      <stop offset="1" stop-color="#0c0c0f"/>
+    </linearGradient>
+    <!-- Brillo especular sobre la parte alta del cuerpo -->
+    <linearGradient id="brillo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".14"/>
+      <stop offset="0.34" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Silueta: parlante cilíndrico (Flip, Charge, Xtreme) -->
+  <symbol id="fig-cilindro" viewBox="0 0 440 220">
+    <ellipse cx="52" cy="110" rx="34" ry="96" fill="#24242b"/>
+    <rect x="52" y="14" width="336" height="192" fill="url(#metal)"/>
+    <rect x="52" y="14" width="336" height="192" fill="url(#rejilla)"/>
+    <rect x="52" y="14" width="336" height="192" fill="url(#brillo)"/>
+    <ellipse cx="388" cy="110" rx="34" ry="96" fill="#0b0b0d" stroke="#ff6a00" stroke-width="8"/>
+    <ellipse cx="388" cy="110" rx="17" ry="50" fill="none" stroke="#ff6a00" stroke-width="2.5" opacity=".4"/>
+  </symbol>
+
+
+
+
+  <!-- Iconos de interfaz (trazo, estilo Lucide) -->
+  <symbol id="ico-flecha" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="ico-abajo" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
+
+  <!-- MARCA: siluetas de los parlantes -> feature/galeria-productos -->
+
+  <!-- MARCA: iconos de tecnologia -> feature/tecnologia-y-pie -->
+</svg>
+
+<!-- ================= NAVEGACIÓN ================= -->
+<header class="nav" id="nav">
+  <div class="nav__caja">
+    <a class="marca" href="#inicio" aria-label="JBL, ir al inicio">
+      <span class="marca__sello" aria-hidden="true"></span>
+      <span class="marca__texto">JBL</span>
+    </a>
+
+    <nav class="nav__menu" id="menu" aria-label="Navegación principal">
+      <a href="#manifiesto">Marca</a>
+      <a href="#productos">Parlantes</a>
+      <a href="#tecnologia">Tecnología</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <button class="nav__boton" id="navBoton" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+  </div>
+</header>
+
+<main id="contenido">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="inicio">
+    <div class="hero__rejilla">
+      <div class="hero__texto">
+        <p class="etiqueta reveal">Audio portátil · Desde 1946</p>
+        <h1 class="titular reveal">
+          El sonido
+          <span class="titular__acento">que se siente</span>
+        </h1>
+        <p class="hero__bajada reveal">
+          Graves que empujan el pecho, agudos que no se rompen y una carcasa que
+          aguanta la playa, la lluvia y la fiesta. Esto es JBL Pro&nbsp;Sound.
+        </p>
+        <div class="hero__acciones reveal">
+          <a class="boton boton--solido" href="#productos">
+            Ver los parlantes
+            <svg class="boton__ico" aria-hidden="true"><use href="#ico-flecha"/></svg>
+          </a>
+          <a class="boton boton--linea" href="#manifiesto">Conocer la marca</a>
+        </div>
+      </div>
+
+      <div class="hero__visual reveal">
+        <div class="ondas" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <svg class="figura figura--hero" role="img" aria-label="Ilustración de un parlante portátil JBL">
+          <use href="#fig-cilindro"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="hero__pie">
+      <dl class="datos">
+        <div class="datos__item"><dt>Potencia máxima</dt><dd><span data-contador="180">180</span> W</dd></div>
+        <div class="datos__item"><dt>Batería</dt><dd>hasta <span data-contador="24">24</span> h</dd></div>
+        <div class="datos__item"><dt>Resistencia</dt><dd>IP67</dd></div>
+      </dl>
+      <a class="hero__scroll" href="#manifiesto" aria-label="Bajar a la siguiente sección">
+        <svg aria-hidden="true"><use href="#ico-abajo"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= CINTA ================= -->
+  <div class="cinta" aria-hidden="true">
+    <div class="cinta__pista">
+      <span>JBL Pro Sound</span><span class="cinta__punto"></span>
+      <span>PartyBoost</span><span class="cinta__punto"></span>
+      <span>Resistente al agua</span><span class="cinta__punto"></span>
+      <span>Bluetooth 5.1</span><span class="cinta__punto"></span>
+      <span>JBL Pro Sound</span><span class="cinta__punto"></span>
+      <span>PartyBoost</span><span class="cinta__punto"></span>
+      <span>Resistente al agua</span><span class="cinta__punto"></span>
+      <span>Bluetooth 5.1</span><span class="cinta__punto"></span>
+    </div>
+  </div>
+
+  <!-- ================= MANIFIESTO ================= -->
+  <section class="manifiesto" id="manifiesto">
+    <p class="etiqueta reveal">01 — La marca</p>
+    <p class="manifiesto__texto reveal">
+      Desde <strong>1946</strong> construimos altavoces para los que no se conforman
+      con escuchar. El mismo sonido que llena estadios y salas de cine cabe hoy
+      en una mano: <em>eso</em> es lo que hace JBL.
+    </p>
+    <div class="manifiesto__pie reveal">
+      <span class="firma">James B. Lansing Sound</span>
+      <span class="manifiesto__linea" aria-hidden="true"></span>
+    </div>
+  </section>
+
+  <!-- MARCA: galeria de parlantes -> feature/galeria-productos -->
+
+  <!-- MARCA: tecnologia y cierre -> feature/tecnologia-y-pie -->
+
+</main>
+
+<!-- MARCA: pie de pagina -> feature/tecnologia-y-pie -->
+
+
+<script src="js/main.js"></script>
 </body>
 </html>
