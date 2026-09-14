@@ -395,7 +395,96 @@ ul { list-style: none; }
   color: var(--tinta-suave);
 }
 
-/* MARCA: estilos de la galeria -> feature/galeria-productos */
+/* ------------------------------ 11. PARLANTES ------------------------------ */
+
+/* Rejilla uniforme: todas las tarjetas del mismo tamaño y la misma
+   proporción de foto. Es lo que hace que el bloque se lea ordenado. */
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--e-lg);
+}
+
+.tarjeta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  overflow: hidden;
+  transition: border-color var(--medio) var(--curva),
+              background-color var(--medio) var(--curva);
+}
+.tarjeta:hover { border-color: var(--borde-fuerte); background: var(--superficie-2); }
+.tarjeta--destacada { border-color: rgba(255, 106, 0, 0.55); }
+
+.tarjeta__foto {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #000;
+}
+.tarjeta__foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms var(--curva);
+}
+.tarjeta:hover .tarjeta__foto img { transform: scale(1.04); }
+
+.tarjeta__sello {
+  position: absolute;
+  top: var(--e-sm);
+  left: var(--e-sm);
+  z-index: var(--z-contenido);
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: var(--acento);
+  color: #0a0a0b;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tarjeta__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-xs);
+  padding: var(--e-md);
+}
+.tarjeta__tipo {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--acento);
+}
+.tarjeta__nombre {
+  font-family: var(--display);
+  font-size: 1.9rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.specs {
+  margin-top: var(--e-sm);
+  border-top: 1px solid var(--borde);
+}
+.specs li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--e-md);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--borde);
+  font-size: 0.875rem;
+}
+.specs span { color: var(--tinta-suave); }
+.specs strong { font-weight: 700; font-variant-numeric: tabular-nums; }
+
 
 /* MARCA: estilos de tecnologia y resistencia -> feature/tecnologia-y-pie */
 
