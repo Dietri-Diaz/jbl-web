@@ -196,13 +196,13 @@ ul { list-style: none; }
 
 /* Sólo se esconde si el navegador ejecuta JavaScript; sin él, la página
    se ve completa. */
-.reveal {
+.js .reveal {
   opacity: 0;
   transform: translateY(16px);
   transition: opacity var(--medio) var(--curva),
               transform var(--medio) var(--curva);
 }
-.reveal.visible { opacity: 1; transform: none; }
+.js .reveal.visible { opacity: 1; transform: none; }
 
 /* ------------------------------ 7. NAVEGACIÓN ------------------------------ */
 
@@ -511,6 +511,6 @@ ul { list-style: none; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .reveal { opacity: 1; transform: none; }
+  .js .reveal { opacity: 1; transform: none; }
   .tarjeta:hover .tarjeta__foto img { transform: none; }
 }
