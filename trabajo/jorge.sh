@@ -1,3 +1,147 @@
+#!/usr/bin/env bash
+# ==========================================================================
+#  PROYECTO JBL  -  aporte de JORGE
+#  Rama: feature/interactividad
+#
+#  Ejecutalo desde la carpeta del repositorio:
+#      bash trabajo/jorge.sh
+# ==========================================================================
+set -e
+
+RAMA="feature/interactividad"
+
+[ -d .git ] || {
+  echo "ERROR: ejecuta esto dentro de la carpeta jbl-web."
+  exit 1
+}
+
+echo ""
+echo "=================================================================="
+echo "   Aporte de JORGE  ->  $RAMA"
+echo "=================================================================="
+echo ""
+
+# ---- Tu identidad ----------------------------------------------------------
+limpiar() {
+  printf '%s' "$1" | tr -d '\r\n' | sed -e 's/^\xEF\xBB\xBF//' \
+    -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
+}
+
+NOMBRE=$(limpiar "$(git config user.name || true)")
+CORREO=$(limpiar "$(git config user.email || true)")
+
+if [ -z "$NOMBRE" ] || [ -z "$CORREO" ]; then
+  echo "Antes de continuar, dinos quien eres:"
+  printf "   Nombre y apellido    : "
+  read -r NOMBRE
+  printf "   Correo de tu GitHub  : "
+  read -r CORREO
+  NOMBRE=$(limpiar "$NOMBRE")
+  CORREO=$(limpiar "$CORREO")
+  git config --local user.name  "$NOMBRE"
+  git config --local user.email "$CORREO"
+  echo ""
+fi
+
+echo "Tus commits van a quedar como: $NOMBRE <$CORREO>"
+echo ""
+
+# ---- Tu rama ---------------------------------------------------------------
+git fetch origin --prune
+if git rev-parse --verify --quiet "origin/$RAMA" > /dev/null; then
+  git switch -C "$RAMA" "origin/$RAMA"
+else
+  git switch -C "$RAMA" "origin/feature/pagina-inicio"
+fi
+echo ""
+
+# ---- Tus commits -----------------------------------------------------------
+echo "--> Menu movil, apariciones al hacer scroll y barra fija"
+cat > js/main.js <<'FIN_DE_ARCHIVO_JBL'
+/* =========================================================================
+   JBL — Landing publicitaria
+   Sólo dos comportamientos: el menú en móvil y una aparición suave de los
+   bloques al hacer scroll. El resto del movimiento vive en el CSS.
+   ========================================================================= */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  const sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------------------------------------------------------------
+     1. La barra se vuelve sólida al bajar
+     --------------------------------------------------------------------- */
+  const nav = document.getElementById('nav');
+
+  const actualizarNav = () => {
+    nav.classList.toggle('compacta', window.scrollY > 40);
+  };
+
+  actualizarNav();
+  window.addEventListener('scroll', actualizarNav, { passive: true });
+
+  /* ---------------------------------------------------------------------
+     2. Menú móvil
+     --------------------------------------------------------------------- */
+  const boton = document.getElementById('navBoton');
+  const menu = document.getElementById('menu');
+
+  const cerrarMenu = () => {
+    menu.classList.remove('abierto');
+    boton.setAttribute('aria-expanded', 'false');
+    boton.setAttribute('aria-label', 'Abrir menú');
+  };
+
+  boton.addEventListener('click', () => {
+    const abierto = menu.classList.toggle('abierto');
+    boton.setAttribute('aria-expanded', String(abierto));
+    boton.setAttribute('aria-label', abierto ? 'Cerrar menú' : 'Abrir menú');
+  });
+
+  menu.querySelectorAll('a').forEach((enlace) => {
+    enlace.addEventListener('click', cerrarMenu);
+  });
+
+  document.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Escape') cerrarMenu();
+  });
+
+  /* ---------------------------------------------------------------------
+     3. Aparición de los bloques al entrar en pantalla
+     IntersectionObserver avisa cuando un elemento entra en el viewport,
+     sin tener que escuchar el scroll todo el tiempo.
+     --------------------------------------------------------------------- */
+  const elementos = document.querySelectorAll('.reveal');
+
+  if (sinMovimiento) {
+    elementos.forEach((el) => el.classList.add('visible'));
+    return;
+  }
+
+  const observador = new IntersectionObserver((entradas) => {
+    entradas.forEach((entrada, indice) => {
+      if (!entrada.isIntersecting) return;
+
+      // Cascada corta: los elementos de un mismo bloque entran escalonados.
+      entrada.target.style.transitionDelay = `${Math.min(indice, 6) * 60}ms`;
+      entrada.target.classList.add('visible');
+
+      observador.unobserve(entrada.target);
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -60px 0px'
+  });
+
+  elementos.forEach((el) => observador.observe(el));
+
+});
+FIN_DE_ARCHIVO_JBL
+git add js/main.js
+git commit -m 'feat: agrega el menu movil y las apariciones al hacer scroll'
+echo ""
+echo "--> Correccion: la pagina se veia en negro sin JavaScript"
+cat > css/estilos.css <<'FIN_DE_ARCHIVO_JBL'
 /* =========================================================================
    JBL — Landing publicitaria
    Fondo oscuro con un solo color de acento. Las fotografías mandan; el
@@ -395,233 +539,9 @@ ul { list-style: none; }
   color: var(--tinta-suave);
 }
 
-/* ------------------------------ 11. PARLANTES ------------------------------ */
+/* MARCA: estilos de la galeria -> feature/galeria-productos */
 
-/* Rejilla uniforme: todas las tarjetas del mismo tamaño y la misma
-   proporción de foto. Es lo que hace que el bloque se lea ordenado. */
-.galeria {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--e-lg);
-}
-
-.tarjeta {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  background: var(--superficie);
-  border: 1px solid var(--borde);
-  border-radius: var(--radio);
-  overflow: hidden;
-  transition: border-color var(--medio) var(--curva),
-              background-color var(--medio) var(--curva);
-}
-.tarjeta:hover { border-color: var(--borde-fuerte); background: var(--superficie-2); }
-.tarjeta--destacada { border-color: rgba(255, 106, 0, 0.55); }
-
-.tarjeta__foto {
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  background: #000;
-}
-.tarjeta__foto img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 500ms var(--curva);
-}
-.tarjeta:hover .tarjeta__foto img { transform: scale(1.04); }
-
-.tarjeta__sello {
-  position: absolute;
-  top: var(--e-sm);
-  left: var(--e-sm);
-  z-index: var(--z-contenido);
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  background: var(--acento);
-  color: #0a0a0b;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.tarjeta__cuerpo {
-  display: flex;
-  flex-direction: column;
-  gap: var(--e-xs);
-  padding: var(--e-md);
-}
-.tarjeta__tipo {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--acento);
-}
-.tarjeta__nombre {
-  font-family: var(--display);
-  font-size: 1.9rem;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  font-weight: 400;
-}
-
-.specs {
-  margin-top: var(--e-sm);
-  border-top: 1px solid var(--borde);
-}
-.specs li {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--e-md);
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--borde);
-  font-size: 0.875rem;
-}
-.specs span { color: var(--tinta-suave); }
-.specs strong { font-weight: 700; font-variant-numeric: tabular-nums; }
-
-
-/* ------------------------------ 12. TECNOLOGÍA ------------------------------ */
-
-.tecnologia { background: var(--superficie); border-block: 1px solid var(--borde); }
-.practicidad { background: var(--superficie); border-block: 1px solid var(--borde); }
-
-/* Bloque de dos columnas reutilizable: foto a un lado, texto al otro.
-   Las secciones alternan el lado con .duo--invertido. */
-.duo {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(2rem, 5vw, 4rem);
-  align-items: center;
-}
-
-.duo__foto {
-  border-radius: var(--radio);
-  overflow: hidden;
-  border: 1px solid var(--borde);
-}
-.duo__foto img { width: 100%; aspect-ratio: 4 / 3.4; object-fit: cover; }
-
-.duo__texto { display: flex; flex-direction: column; gap: var(--e-sm); }
-
-@media (min-width: 1001px) {
-  .duo--invertido .duo__texto { order: -1; }
-}
-.duo__parrafo {
-  max-width: 52ch;
-  color: var(--tinta-suave);
-  text-wrap: pretty;
-}
-.duo__parrafo:first-of-type { margin-top: var(--e-xs); }
-
-/* Lista de definiciones para los grados de protección */
-.datos {
-  margin-top: var(--e-md);
-  border-top: 1px solid var(--borde);
-}
-.datos__fila {
-  display: grid;
-  grid-template-columns: 5.5rem minmax(0, 1fr);
-  gap: var(--e-md);
-  padding: var(--e-sm) 0;
-  border-bottom: 1px solid var(--borde);
-}
-.datos__fila dt {
-  font-family: var(--display);
-  font-size: 1.35rem;
-  line-height: 1.1;
-  letter-spacing: 0.04em;
-  color: var(--acento);
-}
-.datos__fila dd {
-  font-size: 0.9375rem;
-  color: var(--tinta-suave);
-  text-wrap: pretty;
-}
-
-/* Comparación de los dos extremos de la línea */
-.comparativa {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  gap: var(--e-md);
-  margin-top: var(--e-lg);
-  padding: var(--e-md);
-  border: 1px solid var(--borde);
-  border-radius: var(--radio);
-  background: var(--fondo);
-}
-.comparativa__polo { text-align: center; }
-.comparativa__valor {
-  font-family: var(--display);
-  font-size: 2rem;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  font-variant-numeric: tabular-nums;
-}
-.comparativa__polo--fuerte .comparativa__valor { color: var(--acento); }
-.comparativa__nombre {
-  margin-top: 0.2rem;
-  font-size: 0.8125rem;
-  font-weight: 700;
-}
-.comparativa__nota {
-  font-size: 0.75rem;
-  color: var(--tinta-suave);
-}
-.comparativa__barra {
-  width: clamp(2rem, 6vw, 4.5rem);
-  height: 2px;
-  border-radius: 2px;
-  background: linear-gradient(to right, var(--borde-fuerte), var(--acento));
-}
-
-.rasgos {
-  display: flex;
-  flex-direction: column;
-  gap: var(--e-md);
-  margin-top: var(--e-md);
-}
-.rasgo {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--e-md);
-  align-items: start;
-  padding-top: var(--e-md);
-  border-top: 1px solid var(--borde);
-}
-.rasgo:first-child { padding-top: 0; border-top: 0; }
-.rasgo__ico {
-  width: 26px;
-  height: 26px;
-  margin-top: 0.2rem;
-  color: var(--acento);
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.rasgo h3 {
-  font-family: var(--display);
-  font-size: 1.5rem;
-  line-height: 1.1;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  font-weight: 400;
-}
-.rasgo p {
-  margin-top: 0.15rem;
-  font-size: 0.9375rem;
-  color: var(--tinta-suave);
-  text-wrap: pretty;
-}
-
+/* MARCA: estilos de tecnologia y resistencia -> feature/tecnologia-y-pie */
 
 /* ------------------------------ 13. CIERRE ------------------------------ */
 
@@ -667,130 +587,7 @@ ul { list-style: none; }
   text-wrap: pretty;
 }
 
-/* ------------------------------ 14. PIE ------------------------------ */
-
-.pie {
-  padding-block: var(--e-2xl) var(--e-xl);
-  border-top: 1px solid var(--borde);
-  background: var(--superficie);
-}
-
-/* La columna de marca pesa más que las de enlaces: por eso 1.6fr. */
-.pie__rejilla {
-  display: grid;
-  grid-template-columns: 1.6fr repeat(3, 1fr);
-  gap: clamp(2rem, 4vw, 3.5rem);
-  padding-bottom: var(--e-xl);
-  border-bottom: 1px solid var(--borde);
-}
-
-.pie__marca {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--e-md);
-}
-.pie__marca .marca img { width: 88px; }
-
-.pie__resumen {
-  max-width: 42ch;
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: var(--tinta-suave);
-  text-wrap: pretty;
-}
-
-/* Redes sociales */
-.redes {
-  display: flex;
-  gap: var(--e-sm);
-  margin-top: var(--e-xs);
-}
-.redes a {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border: 1px solid var(--borde);
-  border-radius: var(--radio);
-  color: var(--tinta-suave);
-  transition: color var(--rapido) var(--curva),
-              border-color var(--rapido) var(--curva),
-              background-color var(--rapido) var(--curva);
-}
-.redes a:hover {
-  color: #0a0a0b;
-  background: var(--acento);
-  border-color: var(--acento);
-}
-.redes__ico {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-}
-
-/* Columnas de enlaces */
-.pie__columna { display: flex; flex-direction: column; gap: var(--e-sm); }
-.pie__titulo {
-  font-family: var(--display);
-  font-size: 1.15rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 400;
-  color: var(--tinta);
-}
-.pie__columna ul { display: flex; flex-direction: column; gap: 0.45rem; }
-.pie__columna a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9375rem;
-  color: var(--tinta-suave);
-  transition: color var(--rapido) var(--curva);
-}
-.pie__columna a:hover { color: var(--acento); }
-.pie__ico {
-  width: 13px;
-  height: 13px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0.65;
-}
-
-/* Aviso legal */
-.pie__barra {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--e-md);
-  padding-top: var(--e-lg);
-}
-.pie__aviso {
-  flex: 1 1 42ch;
-  max-width: 82ch;
-  font-size: 0.8125rem;
-  line-height: 1.65;
-  color: var(--tinta-suave);
-  text-wrap: pretty;
-}
-.pie__aviso strong { color: var(--tinta); font-weight: 600; }
-.pie__aviso code {
-  font-family: ui-monospace, Consolas, monospace;
-  font-size: 0.95em;
-  color: var(--tinta);
-}
-.pie__firma {
-  flex: 0 0 auto;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--tinta-suave);
-}
-
+/* MARCA: estilos del pie -> feature/tecnologia-y-pie */
 
 /* ------------------------------ 15. RESPONSIVE ------------------------------ */
 
@@ -861,3 +658,176 @@ ul { list-style: none; }
   .js .reveal { opacity: 1; transform: none; }
   .tarjeta:hover .tarjeta__foto img { transform: none; }
 }
+FIN_DE_ARCHIVO_JBL
+cat > index.html <<'FIN_DE_ARCHIVO_JBL'
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>JBL — El sonido que se siente</title>
+  <meta name="description" content="Conoce la línea de parlantes portátiles JBL: JBL Pro Sound, resistencia al agua y hasta 24 horas de batería. Del Go 2 de bolsillo al Boombox 3 de 180 vatios.">
+  <meta name="theme-color" content="#0a0a0b">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="JBL — El sonido que se siente">
+  <meta property="og:description" content="Parlantes portátiles con JBL Pro Sound. Del Go 2 de bolsillo al Boombox 3 de 180 vatios.">
+  <meta property="og:image" content="assets/img/hero-marca.jpg">
+  <meta property="og:locale" content="es_PE">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+
+  <!-- Marca que JavaScript está activo. Las apariciones al hacer scroll sólo
+       se aplican si existe esta clase: sin JS la página se ve completa. -->
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<a class="salto" href="#contenido">Saltar al contenido</a>
+
+<!-- Iconos de trazo, estilo Lucide. Se definen una vez y se reutilizan. -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <!-- MARCA: iconos de tecnologia -> feature/tecnologia-y-pie -->
+  <symbol id="ico-flecha" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="ico-externo" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></symbol>
+</svg>
+
+<!-- MARCA: logotipos de redes -> feature/tecnologia-y-pie -->
+
+<!-- ================= NAVEGACIÓN ================= -->
+<header class="nav" id="nav">
+  <div class="nav__caja">
+    <a class="marca" href="#inicio" aria-label="JBL, ir al inicio">
+      <img src="assets/img/logo-jbl.svg" alt="JBL" width="64" height="45">
+    </a>
+
+    <nav class="nav__menu" id="menu" aria-label="Navegación principal">
+      <a href="#parlantes">Parlantes</a>
+      <a href="#tecnologia">Tecnología</a>
+      <a href="#resistencia">Resistencia</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <button class="nav__boton" id="navBoton" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+  </div>
+</header>
+
+<main id="contenido">
+
+  <!-- ================= PORTADA ================= -->
+  <section class="portada" id="inicio">
+    <img class="portada__fondo" src="assets/img/hero-marca.jpg" alt="" aria-hidden="true">
+    <div class="contenedor portada__contenido">
+      <p class="etiqueta reveal">Audio portátil · Desde 1946</p>
+      <h1 class="portada__titulo reveal">
+        El sonido<br>
+        <span class="acento">que se siente</span>
+      </h1>
+      <p class="portada__bajada reveal">
+        Graves que empujan el pecho, agudos que no se rompen y una carcasa que
+        aguanta la playa, la lluvia y la fiesta.
+      </p>
+      <div class="acciones reveal">
+        <a class="boton boton--solido" href="#parlantes">
+          Ver los parlantes
+          <svg class="boton__ico" aria-hidden="true"><use href="#ico-flecha"/></svg>
+        </a>
+        <a class="boton boton--linea" href="#marca">Conocer la marca</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CIFRAS ================= -->
+  <section class="cifras" aria-label="La marca en cifras">
+    <div class="contenedor">
+      <div class="cifras__rejilla">
+        <div class="cifra">
+          <p class="cifra__dato">100<span class="cifra__unidad">millones</span></p>
+          <p class="cifra__pie">Parlantes portátiles vendidos en el mundo</p>
+        </div>
+        <div class="cifra">
+          <p class="cifra__dato">34,2<span class="cifra__unidad">%</span></p>
+          <p class="cifra__pie">Del mercado mundial de parlantes portátiles</p>
+        </div>
+        <div class="cifra">
+          <p class="cifra__dato">5<span class="cifra__unidad">años</span></p>
+          <p class="cifra__pie">Seguidos como marca líder de la categoría</p>
+        </div>
+        <div class="cifra">
+          <p class="cifra__dato">1946</p>
+          <p class="cifra__pie">Año en que James B. Lansing fundó la marca</p>
+        </div>
+      </div>
+      <p class="cifras__fuente">
+        Cifras publicadas por Harman International en septiembre de 2019, al
+        anunciar los 100 millones de unidades en la feria IFA de Berlín.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= MARCA ================= -->
+  <section class="seccion" id="marca">
+    <div class="contenedor bloque-marca">
+      <p class="etiqueta reveal">La marca</p>
+      <p class="declaracion reveal">
+        Desde <strong>1946</strong> construimos altavoces para los que no se
+        conforman con escuchar. El mismo sonido que llena estadios y salas de
+        cine cabe hoy en una mano.
+      </p>
+      <p class="firma reveal">James B. Lansing Sound</p>
+    </div>
+  </section>
+
+  <!-- MARCA: galeria de parlantes -> feature/galeria-productos -->
+
+  <!-- MARCA: tecnologia, resistencia y practicidad -> feature/tecnologia-y-pie -->
+
+  <!-- ================= CIERRE ================= -->
+  <section class="cierre" id="contacto">
+    <img class="cierre__fondo" src="assets/img/cierre.jpg" alt="" aria-hidden="true" loading="lazy">
+    <div class="contenedor cierre__contenido">
+      <h2 class="cierre__titulo reveal">El silencio<br>está sobrevalorado</h2>
+      <p class="cierre__texto reveal">
+        Encuentra el parlante que te acompaña en las tiendas autorizadas JBL
+        de todo el país.
+      </p>
+      <a class="boton boton--solido boton--grande reveal" href="#parlantes">
+        Explorar la línea completa
+        <svg class="boton__ico" aria-hidden="true"><use href="#ico-flecha"/></svg>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<!-- MARCA: pie de pagina -> feature/tecnologia-y-pie -->
+
+<script src="js/main.js"></script>
+</body>
+</html>
+FIN_DE_ARCHIVO_JBL
+git add css/estilos.css index.html
+git commit -m 'fix: muestra el contenido aunque el navegador no ejecute JavaScript'
+echo ""
+
+# ---- Publicar --------------------------------------------------------------
+echo ""
+echo "Subiendo a GitHub..."
+echo "(si se abre el navegador, inicia sesion con TU cuenta de GitHub)"
+echo ""
+git push -u origin "$RAMA"
+
+echo ""
+echo "=================================================================="
+git log --oneline -2 --decorate
+echo "=================================================================="
+echo ""
+echo "  Listo. Tus 2 commits ya estan en $RAMA."
+echo ""
