@@ -397,7 +397,137 @@ ul { list-style: none; }
 
 /* MARCA: estilos de la galeria -> feature/galeria-productos */
 
-/* MARCA: estilos de tecnologia y resistencia -> feature/tecnologia-y-pie */
+/* ------------------------------ 12. TECNOLOGÍA ------------------------------ */
+
+.tecnologia { background: var(--superficie); border-block: 1px solid var(--borde); }
+.practicidad { background: var(--superficie); border-block: 1px solid var(--borde); }
+
+/* Bloque de dos columnas reutilizable: foto a un lado, texto al otro.
+   Las secciones alternan el lado con .duo--invertido. */
+.duo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.duo__foto {
+  border-radius: var(--radio);
+  overflow: hidden;
+  border: 1px solid var(--borde);
+}
+.duo__foto img { width: 100%; aspect-ratio: 4 / 3.4; object-fit: cover; }
+
+.duo__texto { display: flex; flex-direction: column; gap: var(--e-sm); }
+
+@media (min-width: 1001px) {
+  .duo--invertido .duo__texto { order: -1; }
+}
+.duo__parrafo {
+  max-width: 52ch;
+  color: var(--tinta-suave);
+  text-wrap: pretty;
+}
+.duo__parrafo:first-of-type { margin-top: var(--e-xs); }
+
+/* Lista de definiciones para los grados de protección */
+.datos {
+  margin-top: var(--e-md);
+  border-top: 1px solid var(--borde);
+}
+.datos__fila {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: var(--e-md);
+  padding: var(--e-sm) 0;
+  border-bottom: 1px solid var(--borde);
+}
+.datos__fila dt {
+  font-family: var(--display);
+  font-size: 1.35rem;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  color: var(--acento);
+}
+.datos__fila dd {
+  font-size: 0.9375rem;
+  color: var(--tinta-suave);
+  text-wrap: pretty;
+}
+
+/* Comparación de los dos extremos de la línea */
+.comparativa {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--e-md);
+  margin-top: var(--e-lg);
+  padding: var(--e-md);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--fondo);
+}
+.comparativa__polo { text-align: center; }
+.comparativa__valor {
+  font-family: var(--display);
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.comparativa__polo--fuerte .comparativa__valor { color: var(--acento); }
+.comparativa__nombre {
+  margin-top: 0.2rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.comparativa__nota {
+  font-size: 0.75rem;
+  color: var(--tinta-suave);
+}
+.comparativa__barra {
+  width: clamp(2rem, 6vw, 4.5rem);
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--borde-fuerte), var(--acento));
+}
+
+.rasgos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-md);
+  margin-top: var(--e-md);
+}
+.rasgo {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--e-md);
+  align-items: start;
+  padding-top: var(--e-md);
+  border-top: 1px solid var(--borde);
+}
+.rasgo:first-child { padding-top: 0; border-top: 0; }
+.rasgo__ico {
+  width: 26px;
+  height: 26px;
+  margin-top: 0.2rem;
+  color: var(--acento);
+}
+.rasgo h3 {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.rasgo p {
+  margin-top: 0.15rem;
+  font-size: 0.9375rem;
+  color: var(--tinta-suave);
+  text-wrap: pretty;
+}
+
 
 /* ------------------------------ 13. CIERRE ------------------------------ */
 
@@ -443,7 +573,130 @@ ul { list-style: none; }
   text-wrap: pretty;
 }
 
-/* MARCA: estilos del pie -> feature/tecnologia-y-pie */
+/* ------------------------------ 14. PIE ------------------------------ */
+
+.pie {
+  padding-block: var(--e-2xl) var(--e-xl);
+  border-top: 1px solid var(--borde);
+  background: var(--superficie);
+}
+
+/* La columna de marca pesa más que las de enlaces: por eso 1.6fr. */
+.pie__rejilla {
+  display: grid;
+  grid-template-columns: 1.6fr repeat(3, 1fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding-bottom: var(--e-xl);
+  border-bottom: 1px solid var(--borde);
+}
+
+.pie__marca {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-md);
+}
+.pie__marca .marca img { width: 88px; }
+
+.pie__resumen {
+  max-width: 42ch;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--tinta-suave);
+  text-wrap: pretty;
+}
+
+/* Redes sociales */
+.redes {
+  display: flex;
+  gap: var(--e-sm);
+  margin-top: var(--e-xs);
+}
+.redes a {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  color: var(--tinta-suave);
+  transition: color var(--rapido) var(--curva),
+              border-color var(--rapido) var(--curva),
+              background-color var(--rapido) var(--curva);
+}
+.redes a:hover {
+  color: #0a0a0b;
+  background: var(--acento);
+  border-color: var(--acento);
+}
+.redes__ico {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Columnas de enlaces */
+.pie__columna { display: flex; flex-direction: column; gap: var(--e-sm); }
+.pie__titulo {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--tinta);
+}
+.pie__columna ul { display: flex; flex-direction: column; gap: 0.45rem; }
+.pie__columna a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9375rem;
+  color: var(--tinta-suave);
+  transition: color var(--rapido) var(--curva);
+}
+.pie__columna a:hover { color: var(--acento); }
+.pie__ico {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.65;
+}
+
+/* Aviso legal */
+.pie__barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--e-md);
+  padding-top: var(--e-lg);
+}
+.pie__aviso {
+  flex: 1 1 42ch;
+  max-width: 82ch;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: var(--tinta-suave);
+  text-wrap: pretty;
+}
+.pie__aviso strong { color: var(--tinta); font-weight: 600; }
+.pie__aviso code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.95em;
+  color: var(--tinta);
+}
+.pie__firma {
+  flex: 0 0 auto;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+
 
 /* ------------------------------ 15. RESPONSIVE ------------------------------ */
 
