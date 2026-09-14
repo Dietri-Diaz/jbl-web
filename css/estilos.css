@@ -512,6 +512,11 @@ ul { list-style: none; }
   height: 26px;
   margin-top: 0.2rem;
   color: var(--acento);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .rasgo h3 {
   font-family: var(--display);
