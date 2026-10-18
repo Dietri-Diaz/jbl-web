@@ -196,13 +196,13 @@ ul { list-style: none; }
 
 /* Sólo se esconde si el navegador ejecuta JavaScript; sin él, la página
    se ve completa. */
-.js .reveal {
+.reveal {
   opacity: 0;
   transform: translateY(16px);
   transition: opacity var(--medio) var(--curva),
               transform var(--medio) var(--curva);
 }
-.js .reveal.visible { opacity: 1; transform: none; }
+.reveal.visible { opacity: 1; transform: none; }
 
 /* ------------------------------ 7. NAVEGACIÓN ------------------------------ */
 
@@ -601,11 +601,6 @@ ul { list-style: none; }
   height: 26px;
   margin-top: 0.2rem;
   color: var(--acento);
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 .rasgo h3 {
   font-family: var(--display);
@@ -858,6 +853,6 @@ ul { list-style: none; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .js .reveal { opacity: 1; transform: none; }
+  .reveal { opacity: 1; transform: none; }
   .tarjeta:hover .tarjeta__foto img { transform: none; }
 }
