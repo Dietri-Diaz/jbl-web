@@ -15,6 +15,9 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    // Direccion de la landing publica que consume la API del catalogo.
+    'landing_url' => env('LANDING_URL', 'http://127.0.0.1:5500'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -65,7 +68,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Lima',
 
     /*
     |--------------------------------------------------------------------------

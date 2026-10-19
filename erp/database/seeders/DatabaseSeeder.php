@@ -3,23 +3,21 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
-     * Seed the application's database.
+     * Datos iniciales del ERP: un administrador y el catálogo de la landing.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::updateOrCreate(
+            ['email' => 'admin@jbl.pe'],
+            ['name' => 'Administrador JBL', 'password' => Hash::make('admin123')],
+        );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $this->call(ParlanteSeeder::class);
     }
 }
