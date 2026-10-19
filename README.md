@@ -4,9 +4,22 @@ Landing de la marca **JBL**, fabricante de parlantes portátiles y equipos de
 audio. No es una tienda: presenta la identidad de la marca y muestra la línea
 de productos como gancho comercial, sin carrito ni precios.
 
+Incluye un **ERP del catálogo** hecho en Laravel: desde un panel se administran
+los parlantes que muestra la landing y se leen los mensajes de su formulario de
+contacto.
+
 ## Cómo verlo
 
-Abre `index.html` en el navegador. No hace falta servidor ni instalar nada.
+Abre `index.html` en el navegador. No hace falta servidor ni instalar nada:
+si el ERP no está encendido, la página muestra el catálogo escrito en el HTML.
+
+Para ver el catálogo y el formulario conectados al ERP, enciende el ERP
+(instrucciones en [`erp/README.md`](erp/README.md)) y sirve la landing en el
+puerto 5500:
+
+```
+python -m http.server 5500
+```
 
 ## Tecnologías
 
@@ -15,7 +28,9 @@ Abre `index.html` en el navegador. No hace falta servidor ni instalar nada.
 | Estructura | HTML5 semántico |
 | Estilos | CSS3 con variables nativas, Flexbox y Grid |
 | Interactividad | JavaScript ES6 (IntersectionObserver) |
-| Datos | JSON estático |
+| Datos de la landing | JSON estático, o la API del ERP cuando está encendido |
+| ERP (backend) | Laravel 12 sobre PHP 8.2 |
+| Base de datos | MySQL / MariaDB |
 | Control de versiones | Git y GitHub |
 
 ## Secciones
@@ -28,7 +43,19 @@ Abre `index.html` en el navegador. No hace falta servidor ni instalar nada.
 6. **Resistencia** — qué significa cada grado de protección IP en la práctica.
 7. **Practicidad** — el tamaño frente al volumen, con la comparación de los
    dos extremos de la línea.
-8. **Cierre** — llamada a la acción sobre imagen a sangre.
+8. **Cierre** — llamada a la acción y formulario de contacto.
+
+## ERP del catálogo
+
+| Módulo | Qué permite |
+|--------|-------------|
+| Inicio | Resumen: parlantes publicados, mensajes sin leer y administradores |
+| Parlantes | Agregar, editar, ordenar, publicar u ocultar los parlantes, con su foto |
+| Mensajes | Leer, marcar y eliminar los mensajes del formulario de contacto |
+| Administradores | Dar o quitar acceso al panel |
+| API | `GET /api/parlantes` para la landing y `POST /api/mensajes` para el formulario |
+
+La guía de instalación y uso está en [`erp/README.md`](erp/README.md).
 
 ## Decisiones de diseño
 
@@ -51,9 +78,12 @@ jbl-web/
 ├── index.html
 ├── css/estilos.css
 ├── js/main.js
+├── js/catalogo-erp.js    La galería lee el catálogo del ERP
+├── js/contacto.js        El formulario envía los mensajes al ERP
 ├── assets/img/           Fotografías (portada, productos, secciones)
 ├── data/productos.json
 ├── docs/                 Documentación del proyecto
+├── erp/                  ERP del catálogo (Laravel 12)
 ├── trabajo/              Scripts de aporte de cada integrante
 └── README.md
 ```
@@ -66,10 +96,16 @@ jbl-web/
 | `feature/interactividad` | Chuco Ortega, Jordy Jorge | Menú móvil, apariciones al hacer scroll y barra fija |
 | `feature/galeria-productos` | Huincho Villanueva, Fabrizio Luis | Galería de los seis parlantes con sus fichas técnicas |
 | `feature/tecnologia-y-pie` | Jaimes Daza, Julibeth Antonela | Tecnología, resistencia, practicidad y pie de página |
+| `feature/erp-base` | Chuco Ortega, Jordy Jorge | Proyecto Laravel, base de datos, inicio de sesión y panel |
+| `feature/erp-parlantes` | Huincho Villanueva, Fabrizio Luis | Gestión de parlantes y API del catálogo |
+| `feature/erp-mensajes` | Diaz Asto, Dietri Josue | API y bandeja de mensajes, formulario de contacto |
+| `feature/erp-usuarios` | Diaz Asto, Dietri Josue | Gestión de administradores |
+| `feature/landing-catalogo-erp` | Huincho Villanueva, Fabrizio Luis | La landing muestra el catálogo del ERP |
+| `feature/docs-erp` | Diaz Asto, Dietri Josue | Documentación del ERP |
 
-Cada rama sale de `feature/pagina-inicio`, se integra en `develop` mediante una
-fusión `--no-ff` y, una vez probada, se publica en `main`. La versión estable
-está etiquetada como `v1.0.0`.
+Cada rama se integra en `develop` mediante un pull request revisado y, una vez
+probada, se publica en `main`. Las versiones están etiquetadas: `v1.0.0` (la
+landing), `v1.1.0` (tres correcciones) y `v1.2.0` (el ERP del catálogo).
 
 ## Curso
 

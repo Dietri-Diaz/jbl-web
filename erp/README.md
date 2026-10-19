@@ -1,59 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# JBL ERP — Panel del catálogo
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Panel de administración de la landing de JBL, hecho con **Laravel 12**. Desde
+aquí se decide qué parlantes muestra la landing, en qué orden y con qué ficha
+técnica, y se leen los mensajes que llegan desde su formulario de contacto.
 
-## About Laravel
+## Módulos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+| Módulo | Qué permite |
+|--------|-------------|
+| **Inicio** | Resumen: parlantes publicados, mensajes sin leer, administradores y últimos mensajes |
+| **Parlantes** | Agregar, editar y eliminar parlantes con su foto; publicarlos u ocultarlos en la landing; ordenarlos y destacarlos con un sello |
+| **Mensajes** | Leer los mensajes del formulario de contacto, marcarlos como leídos o no leídos, responder por correo y eliminarlos |
+| **Administradores** | Dar o quitar acceso al panel. Nadie puede eliminar su propia cuenta y siempre queda al menos un administrador |
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requisitos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.2 o superior (el de XAMPP sirve)
+- Composer
+- MySQL o MariaDB (el de XAMPP sirve)
 
-## Learning Laravel
+## Instalación
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Desde la carpeta `erp/`:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+composer install
+cp .env.example .env          # en la consola de Windows: copy .env.example .env
+php artisan key:generate
+```
 
-## Laravel Sponsors
+Crea la base de datos `jbl_erp` (por ejemplo, en phpMyAdmin) y carga las tablas
+con los datos iniciales:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+php artisan migrate --seed
+```
 
-### Premium Partners
+Los datos iniciales son un administrador y los seis parlantes que ya muestra la
+landing, con sus mismas fotos.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Uso
 
-## Contributing
+```bash
+php artisan serve
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Abre <http://127.0.0.1:8000> e ingresa con:
 
-## Code of Conduct
+| Correo | Contraseña |
+|--------|------------|
+| `admin@jbl.pe` | `admin123` |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Cambia esa contraseña desde **Administradores** la primera vez que ingreses.
 
-## Security Vulnerabilities
+## Cómo se conecta con la landing
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+La landing no necesita el ERP para funcionar: si el ERP está apagado, muestra el
+catálogo escrito en `index.html`. Cuando está encendido:
 
-## License
+- `js/catalogo-erp.js` pide `GET /api/parlantes` y arma la galería con los
+  parlantes publicados, en su orden.
+- `js/contacto.js` envía el formulario a `POST /api/mensajes`, y el mensaje
+  aparece en la bandeja del panel.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Para probarlo, sirve la landing en el puerto 5500 desde la raíz del repositorio:
+
+```bash
+python -m http.server 5500
+```
+
+La dirección del ERP que usa la landing se puede cambiar con el atributo
+`data-erp` de la etiqueta `<html>`, por ejemplo `<html lang="es" data-erp="https://erp.ejemplo.com">`.
+
+## API
+
+| Método y ruta | Uso | Respuestas |
+|---------------|-----|------------|
+| `GET /api/parlantes` | Parlantes publicados, en su orden | `200` con `{ "data": [...] }` |
+| `POST /api/mensajes` | Guarda un mensaje del formulario (`nombre`, `correo`, `mensaje`) | `201` guardado · `422` datos inválidos · `429` más de 5 envíos por minuto |
+
+## Estructura
+
+```
+erp/
+├── app/Http/Controllers/        Controladores del panel y de la API (Api/)
+├── app/Models/                  Parlante, Mensaje y User
+├── database/migrations/         Tablas parlantes y mensajes
+├── database/seeders/            Administrador y catálogo inicial
+├── lang/es/validation.php       Mensajes de validación en español
+├── public/css/erp.css           Estilos del panel
+├── resources/views/erp/         Vistas del panel
+├── routes/erp/                  Rutas de cada módulo del panel
+└── routes/api/                  Rutas de la API pública
+```
+
+Cada módulo tiene su propio archivo de rutas en `routes/erp/` o `routes/api/`.
+Así cada integrante agregó el suyo sin tocar los archivos de los demás.
