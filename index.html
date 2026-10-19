@@ -22,6 +22,7 @@
   <!-- Marca que JavaScript está activo. Las apariciones al hacer scroll sólo
        se aplican si existe esta clase: sin JS la página se ve completa. -->
   <script>document.documentElement.classList.add('js');</script>
+  <script src="js/contacto.js" defer></script>
 </head>
 <body>
 
@@ -376,16 +377,49 @@
   <!-- ================= CIERRE ================= -->
   <section class="cierre" id="contacto">
     <img class="cierre__fondo" src="assets/img/cierre.jpg" alt="" aria-hidden="true" loading="lazy">
-    <div class="contenedor cierre__contenido">
-      <h2 class="cierre__titulo reveal">El silencio<br>está sobrevalorado</h2>
-      <p class="cierre__texto reveal">
-        Encuentra el parlante que te acompaña en las tiendas autorizadas JBL
-        de todo el país.
-      </p>
-      <a class="boton boton--solido boton--grande reveal" href="#parlantes">
-        Explorar la línea completa
-        <svg class="boton__ico" aria-hidden="true"><use href="#ico-flecha"/></svg>
-      </a>
+    <div class="contenedor cierre__contenido cierre__contenido--contacto">
+      <div class="cierre__mensaje">
+        <h2 class="cierre__titulo reveal">El silencio<br>está sobrevalorado</h2>
+        <p class="cierre__texto reveal">
+          Encuentra el parlante que te acompaña en las tiendas autorizadas JBL
+          de todo el país.
+        </p>
+        <a class="boton boton--solido boton--grande reveal" href="#parlantes">
+          Explorar la línea completa
+          <svg class="boton__ico" aria-hidden="true"><use href="#ico-flecha"/></svg>
+        </a>
+      </div>
+
+      <!-- Formulario de contacto: el mensaje llega a la bandeja del ERP. -->
+      <form class="contacto reveal" id="contacto-form" novalidate>
+        <h3 class="contacto__titulo">¿Tienes una consulta?</h3>
+        <p class="contacto__texto">Escríbenos y te respondemos por correo.</p>
+
+        <div class="contacto__campo">
+          <label for="contacto-nombre">Nombre</label>
+          <input id="contacto-nombre" name="nombre" type="text" maxlength="80" autocomplete="name" required>
+          <p class="contacto__error" data-error="nombre"></p>
+        </div>
+        <div class="contacto__campo">
+          <label for="contacto-correo">Correo</label>
+          <input id="contacto-correo" name="correo" type="email" maxlength="120" autocomplete="email" required>
+          <p class="contacto__error" data-error="correo"></p>
+        </div>
+        <div class="contacto__campo">
+          <label for="contacto-mensaje">Mensaje</label>
+          <textarea id="contacto-mensaje" name="mensaje" rows="4" minlength="10" maxlength="1000" required></textarea>
+          <p class="contacto__error" data-error="mensaje"></p>
+        </div>
+
+        <!-- Campo trampa para bots: las personas no lo ven ni lo llenan. -->
+        <div class="contacto__trampa" aria-hidden="true">
+          <label for="contacto-sitio">No llenes este campo</label>
+          <input id="contacto-sitio" name="sitio_web" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="boton boton--solido contacto__boton" type="submit">Enviar mensaje</button>
+        <p class="contacto__estado" role="status" aria-live="polite"></p>
+      </form>
     </div>
   </section>
 
