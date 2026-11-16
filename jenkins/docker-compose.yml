@@ -1,0 +1,22 @@
+# Levanta Jenkins para el pipeline de JBL Web.
+#
+#   docker compose -f jenkins/docker-compose.yml up -d --build
+#
+# Jenkins queda en http://localhost:8080 y guarda su configuración en el
+# volumen jenkins_home, así que no se pierde al apagar el contenedor.
+services:
+  jenkins:
+    build: .
+    image: jbl-jenkins:lts
+    container_name: jbl-jenkins
+    restart: unless-stopped
+    ports:
+      - "8080:8080"     # interfaz web y webhook de GitHub
+      - "50000:50000"   # agentes (no se usa en este proyecto, es el puerto estándar)
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    environment:
+      - TZ=America/Lima
+
+volumes:
+  jenkins_home:

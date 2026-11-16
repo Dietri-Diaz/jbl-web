@@ -13,7 +13,7 @@ Route::middleware('guest')->group(function () {
         ->name('login.ingresar');
 });
 
-Route::middleware('auth')->prefix('panel')->group(function () {
+Route::middleware(['auth', 'rol'])->prefix('panel')->group(function () {
     Route::get('/', [PanelController::class, 'inicio'])->name('panel');
     Route::post('salir', [AuthController::class, 'salir'])->name('salir');
 

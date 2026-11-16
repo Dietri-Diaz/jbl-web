@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Producto — JBL Store</title>
+  <meta name="description" content="Ficha del producto en la tienda de demostración JBL: precio, stock y ficha técnica.">
+  <meta name="theme-color" content="#0a0a0b">
+
+  <link rel="icon" href="assets/img/logo-jbl.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="data/catalogo.js"></script>
+  <script src="js/tienda.js"></script>
+</head>
+<body>
+
+<script>JBL.cabecera();</script>
+
+<main id="contenido">
+
+  <!-- La ficha la arma js/producto.js con el producto de la dirección (?p=slug). -->
+  <div class="contenedor" data-ficha></div>
+
+  <section class="seccion seccion--papel" aria-labelledby="t-relacionados" data-relacionados-seccion hidden>
+    <div class="contenedor">
+      <header class="seccion__cab">
+        <div>
+          <p class="etiqueta">De la misma categoría</p>
+          <h2 class="titulo" id="t-relacionados">También te puede <em>gustar</em></h2>
+        </div>
+      </header>
+      <div class="rejilla-prod" data-relacionados></div>
+    </div>
+  </section>
+
+</main>
+
+<script>JBL.pie();</script>
+<script src="js/producto.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+# Vercel publica solo la landing. Todo lo demás se queda fuera del despliegue.
+erp
+trabajo
+jenkins
+database
+scripts
+.github
+Jenkinsfile
+README.md
+*.tar.gz
+url-despliegue.txt
+
+# De docs/ solo se publica la página de créditos, que la landing enlaza.
+docs/*
+!docs/creditos-imagenes.md
