@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mi pedido — JBL Store</title>
+  <meta name="description" content="Sigue el estado de tu pedido en la tienda de demostración JBL con tu código y tu correo.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0a0a0b">
+
+  <link rel="icon" href="assets/img/logo-jbl.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="data/catalogo.js"></script>
+  <script src="js/tienda.js"></script>
+</head>
+<body>
+
+<script>JBL.cabecera();</script>
+
+<main id="contenido">
+
+  <div class="contenedor confirmacion">
+
+    <!-- Resultado: lo arma js/pedido.js -->
+    <div data-pedido aria-live="polite"></div>
+
+    <!-- Buscador de pedidos -->
+    <section class="caja" aria-labelledby="t-seguir" data-buscador style="max-width:720px">
+      <div class="caja__cab"><h1 class="caja__titulo" id="t-seguir">Sigue tu pedido</h1></div>
+      <form class="caja__cuerpo" id="seguir" novalidate>
+        <div class="campos">
+          <div class="campo">
+            <label for="codigo">Código del pedido</label>
+            <input id="codigo" name="codigo" type="text" maxlength="20" placeholder="JBL-000001" autocomplete="off" required aria-describedby="e-codigo">
+            <p class="campo__error" id="e-codigo" data-error="codigo"></p>
+          </div>
+          <div class="campo">
+            <label for="correo">Correo con el que compraste</label>
+            <input id="correo" name="correo" type="email" maxlength="120" autocomplete="email" required aria-describedby="e-correo">
+            <p class="campo__error" id="e-correo" data-error="correo"></p>
+          </div>
+        </div>
+        <button class="boton boton--oscuro" type="submit" style="margin-top:20px">Buscar pedido</button>
+        <p class="estado-form estado-form--error" role="alert" data-estado></p>
+      </form>
+    </section>
+
+  </div>
+
+</main>
+
+<script>JBL.pie();</script>
+<script src="js/pedido.js"></script>
+
+</body>
+</html>
