@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Finalizar compra — JBL Store</title>
+  <meta name="description" content="Completa tus datos para registrar tu pedido en la tienda de demostración JBL.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0a0a0b">
+
+  <link rel="icon" href="assets/img/logo-jbl.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="data/catalogo.js"></script>
+  <script src="js/tienda.js"></script>
+</head>
+<body>
+
+<script>JBL.cabecera();</script>
+
+<main id="contenido">
+
+  <header class="pagina-cab">
+    <div class="contenedor">
+      <nav class="miga" aria-label="Ruta">
+        <a href="index.html">Inicio</a><span aria-hidden="true">/</span>
+        <a href="carrito.html">Carrito</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Finalizar compra</span>
+      </nav>
+      <h1 class="titulo">Finalizar compra</h1>
+    </div>
+  </header>
+
+  <div class="contenedor" data-vacio hidden>
+    <div class="vacio">
+      <p class="vacio__titulo">No hay nada que pagar</p>
+      <p>Tu carrito está vacío. Agrega un producto y vuelve aquí.</p>
+      <a class="boton boton--solido boton--grande" href="catalogo.html">Ver el catálogo</a>
+    </div>
+  </div>
+
+  <form class="contenedor compra" id="pago" novalidate data-pago hidden>
+    <div>
+      <p class="nota" style="margin-bottom:20px">
+        <svg class="ico" aria-hidden="true"><use href="#i-alerta"/></svg>
+        <span><b>Tienda de demostración.</b> El pedido se registra en el sistema, pero no se cobra ni se envía ningún producto.</span>
+      </p>
+
+      <p class="nota nota--error" role="alert" data-error-general hidden style="margin-bottom:20px"></p>
+
+      <!-- ============ 1. DATOS ============ -->
+      <section class="caja" aria-labelledby="t-datos">
+        <div class="caja__cab"><h2 class="caja__titulo" id="t-datos">1. Tus datos</h2></div>
+        <div class="caja__cuerpo campos">
+          <div class="campo campo--ancho">
+            <label for="nombre">Nombre completo</label>
+            <input id="nombre" name="nombre" type="text" maxlength="80" autocomplete="name" required aria-describedby="e-nombre">
+            <p class="campo__error" id="e-nombre" data-error="nombre"></p>
+          </div>
+          <div class="campo">
+            <label for="correo">Correo</label>
+            <input id="correo" name="correo" type="email" maxlength="120" autocomplete="email" required aria-describedby="a-correo e-correo">
+            <p class="campo__ayuda" id="a-correo">Con este correo podrás seguir tu pedido.</p>
+            <p class="campo__error" id="e-correo" data-error="correo"></p>
+          </div>
+          <div class="campo">
+            <label for="telefono">Celular</label>
+            <input id="telefono" name="telefono" type="tel" inputmode="numeric" maxlength="9" autocomplete="tel-national" placeholder="987654321" required aria-describedby="e-telefono">
+            <p class="campo__error" id="e-telefono" data-error="telefono"></p>
+          </div>
+          <div class="campo">
+            <label for="documento">DNI o RUC <span class="campo__opcional">(opcional)</span></label>
+            <input id="documento" name="documento" type="text" inputmode="numeric" maxlength="11" autocomplete="off" aria-describedby="e-documento">
+            <p class="campo__error" id="e-documento" data-error="documento"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 2. ENTREGA ============ -->
+      <section class="caja" aria-labelledby="t-entrega">
+        <div class="caja__cab"><h2 class="caja__titulo" id="t-entrega">2. Entrega</h2></div>
+        <div class="caja__cuerpo">
+          <div class="eleccion" role="radiogroup" aria-labelledby="t-entrega">
+            <label class="eleccion__op">
+              <input type="radio" name="entrega" value="delivery" checked>
+              <span class="eleccion__caja"><b>Envío a domicilio</b><span data-texto-envio>Lima Metropolitana</span></span>
+            </label>
+            <label class="eleccion__op">
+              <input type="radio" name="entrega" value="recojo">
+              <span class="eleccion__caja"><b>Recojo en tienda</b><span>Sin costo</span></span>
+            </label>
+          </div>
+
+          <div class="campos" data-direccion style="margin-top:20px">
+            <div class="campo campo--ancho">
+              <label for="direccion">Dirección</label>
+              <input id="direccion" name="direccion" type="text" maxlength="160" autocomplete="street-address" aria-describedby="e-direccion">
+              <p class="campo__error" id="e-direccion" data-error="direccion"></p>
+            </div>
+            <div class="campo">
+              <label for="distrito">Distrito</label>
+              <select id="distrito" name="distrito" aria-describedby="e-distrito">
+                <option value="">Elige un distrito</option>
+              </select>
+              <p class="campo__error" id="e-distrito" data-error="distrito"></p>
+            </div>
+            <div class="campo">
+              <label for="referencia">Referencia <span class="campo__opcional">(opcional)</span></label>
+              <input id="referencia" name="referencia" type="text" maxlength="160" placeholder="Frente al parque, puerta azul">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 3. PAGO ============ -->
+      <section class="caja" aria-labelledby="t-pago">
+        <div class="caja__cab"><h2 class="caja__titulo" id="t-pago">3. Forma de pago</h2></div>
+        <div class="caja__cuerpo">
+          <div class="eleccion" role="radiogroup" aria-labelledby="t-pago">
+            <label class="eleccion__op">
+              <input type="radio" name="pago" value="contraentrega" checked>
+              <span class="eleccion__caja"><b>Contra entrega</b><span>Pagas en efectivo al recibir</span></span>
+            </label>
+            <label class="eleccion__op">
+              <input type="radio" name="pago" value="yape">
+              <span class="eleccion__caja"><b>Yape o Plin</b><span>Te enviamos los datos al confirmar</span></span>
+            </label>
+            <label class="eleccion__op">
+              <input type="radio" name="pago" value="transferencia">
+              <span class="eleccion__caja"><b>Transferencia</b><span>Te enviamos la cuenta al confirmar</span></span>
+            </label>
+          </div>
+
+          <div class="campo" style="margin-top:20px">
+            <label for="notas">Notas para tu pedido <span class="campo__opcional">(opcional)</span></label>
+            <textarea id="notas" name="notas" maxlength="300" rows="3" placeholder="Horario de entrega, color preferido…"></textarea>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ RESUMEN ============ -->
+    <aside class="caja resumen" aria-labelledby="t-resumen">
+      <div class="caja__cab"><h2 class="caja__titulo" id="t-resumen">Tu pedido</h2></div>
+      <div class="caja__cuerpo">
+        <div data-resumen-lineas></div>
+        <dl class="totales" style="margin-top:16px" data-resumen-totales></dl>
+        <button class="boton boton--solido boton--grande boton--bloque" type="submit" data-confirmar>Confirmar pedido</button>
+        <p class="resumen__nota" data-modo></p>
+      </div>
+    </aside>
+  </form>
+
+</main>
+
+<script>JBL.pie();</script>
+<script src="js/checkout.js"></script>
+
+</body>
+</html>

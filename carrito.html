@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Carrito — JBL Store</title>
+  <meta name="description" content="Tu carrito en la tienda de demostración JBL.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0a0a0b">
+
+  <link rel="icon" href="assets/img/logo-jbl.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="data/catalogo.js"></script>
+  <script src="js/tienda.js"></script>
+</head>
+<body>
+
+<script>JBL.cabecera();</script>
+
+<main id="contenido">
+
+  <header class="pagina-cab">
+    <div class="contenedor">
+      <nav class="miga" aria-label="Ruta">
+        <a href="index.html">Inicio</a><span aria-hidden="true">/</span><span aria-current="page">Carrito</span>
+      </nav>
+      <h1 class="titulo">Tu carrito</h1>
+    </div>
+  </header>
+
+  <!-- Lo arma js/carrito.js -->
+  <div class="contenedor" data-carrito></div>
+
+</main>
+
+<script>JBL.pie();</script>
+<script src="js/carrito.js"></script>
+
+</body>
+</html>

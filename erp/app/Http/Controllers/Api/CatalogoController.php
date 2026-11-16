@@ -3,33 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Parlante;
+use App\Soporte\CatalogoTienda;
 
 class CatalogoController extends Controller
 {
     /**
-     * GET /api/parlantes
-     * Los parlantes publicados, en el orden en que los muestra la landing.
+     * GET /api/catalogo
+     * Todo lo que la tienda necesita en una sola petición: reglas de envío,
+     * categorías y productos publicados.
      */
     public function index()
     {
-        $parlantes = Parlante::visibles()
-            ->orderBy('orden')
-            ->orderBy('nombre')
-            ->get()
-            ->map(fn (Parlante $p) => [
-                'id' => $p->id,
-                'nombre' => $p->nombre,
-                'slug' => $p->slug,
-                'tipo' => $p->tipo,
-                'potencia_w' => $p->potencia_w,
-                'bateria_h' => $p->bateria_h,
-                'resistencia' => $p->resistencia,
-                'sello' => $p->sello,
-                'foto_url' => $p->urlFoto(),
-                'foto_alt' => $p->foto_alt,
-            ]);
-
-        return response()->json(['data' => $parlantes]);
+        return response()->json(CatalogoTienda::datos());
     }
 }
