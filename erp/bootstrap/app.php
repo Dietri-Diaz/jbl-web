@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // Quien no inició sesión va al login; quien ya la inició, al panel.
         $middleware->redirectGuestsTo('/login');
         $middleware->redirectUsersTo('/panel');
+
+        // Permisos del panel según el rol (ver app/Http/Middleware/VerificarRol.php).
+        $middleware->alias(['rol' => \App\Http\Middleware\VerificarRol::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
