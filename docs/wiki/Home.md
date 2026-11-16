@@ -11,8 +11,8 @@ En la tienda se recorre el catálogo, se arma un carrito, se registra un pedido 
 | Qué | Dónde |
 |-----|-------|
 | Repositorio | https://github.com/Dietri-Diaz/jbl-web |
-| Sitio publicado | [EDITAR: dirección de Vercel, por ejemplo https://jbl-web.vercel.app] |
-| Tablero Kanban | [EDITAR: dirección del proyecto en GitHub Projects] |
+| Sitio publicado | https://jbl-web-ebon.vercel.app |
+| Tablero Kanban | https://github.com/users/Dietri-Diaz/projects/1 |
 | Issues | https://github.com/Dietri-Diaz/jbl-web/issues |
 | Versiones | https://github.com/Dietri-Diaz/jbl-web/tags |
 

@@ -1,8 +1,8 @@
 # Despliegue
 
-La tienda se publica en **Vercel**: [EDITAR: dirección de Vercel, por ejemplo https://jbl-web.vercel.app]
+La tienda se publica en **Vercel**: https://jbl-web-ebon.vercel.app
 
-> **Estado al 15/11/2026.** La configuración del despliegue está en el repositorio (`vercel.json`, `.vercelignore` y la etapa Deploy del `Jenkinsfile`), pero el proyecto de Vercel todavía no se ha creado y el pipeline aún no se ha ejecutado. Esta página describe cómo funciona el despliegue una vez configurado.
+> **Estado al 16/11/2026.** El proyecto `jbl-web` existe en Vercel y la versión 2.0.0 está publicada. El despliegue de producción lo hizo Jenkins (ejecución n.º 2 del job `jbl-web`, sobre `main`), con el token guardado en Jenkins Credentials.
 
 ## Qué se publica
 
