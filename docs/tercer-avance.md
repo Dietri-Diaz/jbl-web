@@ -516,7 +516,7 @@ Para enlazar sin cerrar (avances parciales) se usa `Refs #26`.
 
 Requisito: **Docker Desktop** instalado y encendido (https://www.docker.com/products/docker-desktop). En Windows pide activar WSL 2 durante la instalación.
 
-> **Estado al 16/11/2026.** Jenkins corre en el contenedor `jbl-jenkins` y el job `jbl-web` está creado. La ejecución n.º 1 pasó Checkout, Build, Test y Package; la n.º 2, sobre `main`, pasó además Deploy y publicó la tienda en Vercel. Falta el webhook con ngrok: por ahora las ejecuciones se lanzan con **Build Now**.
+> **Estado al 16/11/2026.** Jenkins corre en el contenedor `jbl-jenkins` y el job `jbl-web` está creado. La ejecución n.º 1 pasó Checkout, Build, Test y Package; la n.º 2, sobre `main`, pasó además Deploy y publicó la tienda en Vercel. El webhook de GitHub llega a Jenkins por un túnel de ngrok: la ejecución n.º 3 arrancó sola («Started by GitHub push») al fusionar el pull request #42 en `main`, y volvió a desplegar. El túnel solo funciona mientras ngrok esté abierto, y su dirección gratuita puede cambiar: si cambia, hay que editar el webhook.
 
 Los dos archivos están en la carpeta `jenkins/`:
 
@@ -775,7 +775,7 @@ Los ID deben escribirse exactamente así: son los que busca el `Jenkinsfile`.
 4. En Vercel → **Deployments**, el despliegue nuevo figura como **Production**, con origen CLI.
 5. Abrir el sitio y comprobar el cambio.
 
-Esta prueba se hizo el 16/11/2026 con el pull request #39 (`develop` → `main`): la ejecución n.º 2 de Jenkins terminó con las cinco etapas en verde y publicó https://jbl-web-ebon.vercel.app. Esa ejecución se lanzó con **Build Now**, porque el webhook todavía no está creado.
+Esta prueba se hizo el 16/11/2026 con el pull request #39 (`develop` → `main`): la ejecución n.º 2 de Jenkins terminó con las cinco etapas en verde y publicó https://jbl-web-ebon.vercel.app. Esa ejecución se lanzó con **Build Now**. Con el webhook ya creado se repitió la prueba con el pull request #42: la ejecución n.º 3 arrancó sola y terminó con las cinco etapas en verde.
 
 ---
 
@@ -891,7 +891,7 @@ Las capturas 21, 23 y 26 juntas demuestran el despliegue automático tras una fu
 
 El seguimiento de incidentes convierte los pendientes del equipo en trabajo visible: cada error o mejora tiene un responsable, una etiqueta y un plazo, y queda enlazado al commit y al pull request que lo resuelven, de modo que cualquiera puede reconstruir qué se cambió y por qué. Así se registró también el cambio más grande del proyecto: pasar de una landing publicitaria a una tienda con carrito y pedidos, y ampliar el ERP con inventario, roles y bitácora. La integración continua comprueba cada push en un entorno limpio, igual para todos. Preparar esas comprobaciones ya permitió encontrar un error que nadie había visto (las pruebas del ERP fallaban desde que se creó), y hoy son 46 pruebas que cubren la API, los pedidos, el inventario y los permisos, más un script que verifica las páginas de la tienda. La entrega continua elimina el paso manual de publicar: cuando un cambio llega a `main` y pasa las pruebas, Jenkins lo despliega en Vercel sin intervención de nadie y sin que el token salga de las credenciales de Jenkins. Juntas, las tres prácticas reducen el tiempo entre escribir un cambio y verlo funcionando, evitan que un error llegue al sitio publicado y dejan evidencia verificable del trabajo de cada integrante.
 
-> Al 16/11/2026 el pipeline ya se ejecutó y la tienda está publicada (ver el Anexo B). Falta el webhook de GitHub hacia Jenkins y tomar las evidencias.
+> Al 16/11/2026 el pipeline ya se ejecutó y la tienda está publicada (ver el Anexo B). El webhook de GitHub hacia Jenkins funciona. Falta tomar las evidencias.
 
 ---
 
@@ -992,7 +992,7 @@ Rúbrica del proyecto final (S18), criterio «Integración continua, entrega con
 
 | N.º | Tema | Dónde está | Estado |
 |-----|------|------------|--------|
-| 1 | Configuración de CI con GitHub Actions o similar | Punto 5: Jenkins y `ci.yml` | Hecho: Jenkins configurado y workflow activo. Falta el webhook |
+| 1 | Configuración de CI con GitHub Actions o similar | Punto 5: Jenkins y `ci.yml` | Hecho: Jenkins configurado, workflow activo y webhook funcionando |
 | 2 | Automatización de pruebas o construcción | Etapas Build y Test; 46 pruebas del ERP y verificación de la tienda | Hecho: pasan en Jenkins y en GitHub Actions |
 | 3 | Ejemplo de workflow en `.github/workflows/` | `.github/workflows/ci.yml` | Hecho: en `main`, con ejecuciones en verde |
 | 4 | Captura del pipeline ejecutado | Evidencias 16, 17 y 19 | Pipeline ejecutado; falta tomar las capturas |
@@ -1011,9 +1011,9 @@ Herramientas en la computadora del equipo:
 | Docker Desktop | Instalado y funcionando; Jenkins encendido en el contenedor `jbl-jenkins` |
 | WSL 2 | Instalado |
 | CLI de Vercel | Instalada (versión 65.16.0), con sesión iniciada y el proyecto enlazado |
-| ngrok | Instalado. Falta registrar el token de la cuenta y abrir el túnel |
+| ngrok | Actualizado a la versión 3.39.13 (la 3.3.1 ya no la acepta el servicio) y con el token registrado |
 | Jenkins | Configurado: job `jbl-web`, tres credenciales de Vercel y dos ejecuciones en verde |
-| Webhook de GitHub | Sin crear |
+| Webhook de GitHub | Creado, evento push, hacia el túnel de ngrok. Probado con el pull request #42 |
 | Proyecto de Vercel | Creado: https://jbl-web-ebon.vercel.app |
 
 Criterio «Seguimiento de incidentes», 3 puntos si están los 3 temas: uso de GitHub Issues (punto 4), issue reportado y resuelto (#26 y #27, cerrados al fusionar el pull request #39 en `main`) y vinculación entre issue y commit o pull request (`Closes #n`, Anexo A).
