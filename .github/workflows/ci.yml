@@ -1,0 +1,55 @@
+# Integración continua en GitHub Actions.
+# Repite en la nube de GitHub las mismas comprobaciones que hace Jenkins
+# (Build y Test), para que cada pull request muestre su check verde o rojo
+# aunque el Jenkins local esté apagado. El despliegue lo hace Jenkins.
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  landing:
+    name: Landing (enlaces, datos y JavaScript)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verificar la landing
+        run: node scripts/verificar-landing.mjs
+
+  erp:
+    name: ERP (pruebas de Laravel)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: erp
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Preparar PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, xml, curl, zip, pdo_sqlite, bcmath, gd
+          coverage: none
+
+      - name: Instalar dependencias
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Preparar el entorno
+        run: |
+          cp .env.example .env
+          php artisan key:generate --ansi
+
+      - name: Ejecutar las pruebas
+        run: php artisan test

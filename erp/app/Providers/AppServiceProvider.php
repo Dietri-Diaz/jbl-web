@@ -3,9 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Mensaje;
+use App\Models\Pedido;
+use App\Models\Producto;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,9 +25,13 @@ class AppServiceProvider extends ServiceProvider
         // Paginación con el estilo del panel (sin Tailwind).
         Paginator::defaultView('erp.paginacion');
 
-        // El menú lateral muestra cuántos mensajes faltan leer.
+        // Contadores del menú lateral: lo que está esperando atención.
         View::composer('erp.layout', function ($vista) {
-            $vista->with('mensajesNoLeidos', Schema::hasTable('mensajes') ? Mensaje::noLeidos()->count() : 0);
+            $vista->with('menu', [
+                'pedidos' => Pedido::where('estado', 'pendiente')->count(),
+                'mensajes' => Mensaje::noLeidos()->count(),
+                'stock' => Producto::stockBajo()->count(),
+            ]);
         });
     }
 }
