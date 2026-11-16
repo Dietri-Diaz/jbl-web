@@ -23,3 +23,8 @@ build/
 *.tmp
 *.bak
 ~$*
+
+# ---- Despliegue ----
+.vercel/
+*.tar.gz
+url-despliegue.txt
