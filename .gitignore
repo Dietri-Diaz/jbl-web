@@ -28,3 +28,4 @@ build/
 .vercel/
 *.tar.gz
 url-despliegue.txt
+.env.local
