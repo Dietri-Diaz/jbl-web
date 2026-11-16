@@ -26,6 +26,24 @@ En la tienda se recorre el catálogo, se arma un carrito, se registra un pedido 
 | Base de datos | 16 tablas: 8 del negocio y 8 de Laravel |
 | Pruebas | 46 pruebas automáticas del ERP y un script que verifica la tienda |
 
+## Capturas
+
+**Tienda: catálogo con filtros**
+
+![Catálogo de la tienda con filtros por categoría, precio y oferta](imagenes/tienda-catalogo.png)
+
+**Tienda: carrito**
+
+![Carrito de la tienda con el resumen del pedido](imagenes/tienda-carrito.png)
+
+**ERP: inicio con indicadores y gráficos**
+
+![Inicio del ERP con indicadores de ventas y gráficos](imagenes/erp-inicio.png)
+
+**ERP: pedidos**
+
+![Listado de pedidos del ERP con filtros por estado](imagenes/erp-pedidos.png)
+
 Cuentas de demostración del ERP (contraseña `admin123`): `admin@jbl.pe` (administrador), `editor@jbl.pe` (editor) y `consulta@jbl.pe` (solo lectura).
 
 ## Equipo
@@ -53,4 +71,4 @@ Cuentas de demostración del ERP (contraseña `admin123`): `admin@jbl.pe` (admin
 | `v1.0.0` | Landing completa con fotografías reales | Publicada |
 | `v1.1.0` | Correcciones: contenido sin JavaScript, fichas técnicas e iconos | Publicada |
 | `v1.2.0` | ERP del catálogo, API y formulario de contacto | Publicada |
-| `v2.0.0` | Tienda completa, ERP ampliado, seguimiento de incidentes, CI/CD y despliegue en Vercel | Pendiente: se etiqueta al fusionar en `main` |
+| `v2.0.0` | Tienda completa, ERP ampliado, seguimiento de incidentes, CI/CD y despliegue en Vercel | Publicada |
