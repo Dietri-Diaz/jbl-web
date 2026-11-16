@@ -9,7 +9,7 @@ El proyecto tiene dos automatizaciones que se complementan.
 
 Jenkins es el pipeline principal y el único que despliega. GitHub Actions repite las comprobaciones para que cada pull request muestre su check verde o rojo aunque el Jenkins local esté apagado.
 
-> **Estado al 15/11/2026.** Los archivos del pipeline están escritos y las comprobaciones pasan en local (`node scripts/verificar-landing.mjs` y `php artisan test`). Todavía falta configurar Jenkins, el webhook y el proyecto de Vercel: el pipeline aún no se ha ejecutado. Los pasos están en [`docs/tercer-avance.md`](https://github.com/Dietri-Diaz/jbl-web/blob/main/docs/tercer-avance.md).
+> **Estado al 16/11/2026.** El workflow de GitHub Actions corre en cada push y en cada pull request. Jenkins está configurado en Docker con el job `jbl-web`: la ejecución sobre `main` pasó las cinco etapas y desplegó la tienda en Vercel. Falta el webhook de GitHub (con ngrok) para que Jenkins arranque solo en cada push; por ahora las ejecuciones se lanzan con **Build Now**. Los pasos están en [`docs/tercer-avance.md`](https://github.com/Dietri-Diaz/jbl-web/blob/main/docs/tercer-avance.md).
 
 ## Etapas del pipeline de Jenkins
 

@@ -12,9 +12,9 @@ Guía del equipo para completar el tercer avance de JBL Web. Cada punto dice qu�
 | Base de datos | MySQL / MariaDB, base `jbl_erp`: 16 tablas (8 del negocio y 8 de Laravel) |
 | Pruebas | 46 pruebas automáticas del ERP (`php artisan test`) y un script que verifica la tienda (`node scripts/verificar-landing.mjs`) |
 | Repositorio | https://github.com/Dietri-Diaz/jbl-web |
-| Nube | Vercel: [EDITAR: dirección del sitio publicado] |
+| Nube | Vercel: https://jbl-web-ebon.vercel.app |
 
-Los valores marcados con **[EDITAR]** dependen de pasos que todavía no se han hecho (crear el proyecto en Vercel, crear el tablero) o de fechas del sílabo.
+Los valores marcados con **[EDITAR]** son datos de cada cuenta (tokens, usuario de Jenkins, dominio de ngrok) o fechas del sílabo. El tablero Kanban está en https://github.com/users/Dietri-Diaz/projects/1.
 
 ---
 
@@ -516,7 +516,7 @@ Para enlazar sin cerrar (avances parciales) se usa `Refs #26`.
 
 Requisito: **Docker Desktop** instalado y encendido (https://www.docker.com/products/docker-desktop). En Windows pide activar WSL 2 durante la instalación.
 
-> **Estado al 16/11/2026.** Docker Desktop y WSL 2 ya funcionan en la computadora del equipo y el contenedor `jbl-jenkins` está encendido. Dentro del contenedor se probaron a mano los comandos de las etapas Build, Test y Package y pasan. Falta la configuración inicial, crear el job y ejecutar el pipeline.
+> **Estado al 16/11/2026.** Jenkins corre en el contenedor `jbl-jenkins` y el job `jbl-web` está creado. La ejecución n.º 1 pasó Checkout, Build, Test y Package; la n.º 2, sobre `main`, pasó además Deploy y publicó la tienda en Vercel. Falta el webhook con ngrok: por ahora las ejecuciones se lanzan con **Build Now**.
 
 Los dos archivos están en la carpeta `jenkins/`:
 
@@ -775,7 +775,7 @@ Los ID deben escribirse exactamente así: son los que busca el `Jenkinsfile`.
 4. En Vercel → **Deployments**, el despliegue nuevo figura como **Production**, con origen CLI.
 5. Abrir el sitio y comprobar el cambio.
 
-Esta prueba todavía no se ha hecho: depende de configurar Jenkins (punto 5) y de crear el proyecto en Vercel (punto 7).
+Esta prueba se hizo el 16/11/2026 con el pull request #39 (`develop` → `main`): la ejecución n.º 2 de Jenkins terminó con las cinco etapas en verde y publicó https://jbl-web-ebon.vercel.app. Esa ejecución se lanzó con **Build Now**, porque el webhook todavía no está creado.
 
 ---
 
@@ -891,7 +891,7 @@ Las capturas 21, 23 y 26 juntas demuestran el despliegue automático tras una fu
 
 El seguimiento de incidentes convierte los pendientes del equipo en trabajo visible: cada error o mejora tiene un responsable, una etiqueta y un plazo, y queda enlazado al commit y al pull request que lo resuelven, de modo que cualquiera puede reconstruir qué se cambió y por qué. Así se registró también el cambio más grande del proyecto: pasar de una landing publicitaria a una tienda con carrito y pedidos, y ampliar el ERP con inventario, roles y bitácora. La integración continua comprueba cada push en un entorno limpio, igual para todos. Preparar esas comprobaciones ya permitió encontrar un error que nadie había visto (las pruebas del ERP fallaban desde que se creó), y hoy son 46 pruebas que cubren la API, los pedidos, el inventario y los permisos, más un script que verifica las páginas de la tienda. La entrega continua elimina el paso manual de publicar: cuando un cambio llega a `main` y pasa las pruebas, Jenkins lo despliega en Vercel sin intervención de nadie y sin que el token salga de las credenciales de Jenkins. Juntas, las tres prácticas reducen el tiempo entre escribir un cambio y verlo funcionando, evitan que un error llegue al sitio publicado y dejan evidencia verificable del trabajo de cada integrante.
 
-> Al 15/11/2026, la parte de Jenkins y Vercel está escrita pero todavía no se ha ejecutado (ver el Anexo B). Antes de entregar el informe hay que completar los puntos 5, 6 y 7 y tomar las evidencias.
+> Al 16/11/2026 el pipeline ya se ejecutó y la tienda está publicada (ver el Anexo B). Falta el webhook de GitHub hacia Jenkins y tomar las evidencias.
 
 ---
 
@@ -988,21 +988,21 @@ El `Jenkinsfile` entra completo, con la etapa Deploy, en la rama 4. La rama 5 ag
 
 ## Anexo B. Cobertura de la rúbrica
 
-Rúbrica del proyecto final (S18), criterio «Integración continua, entrega continua y plataformas en la nube», 10 puntos si están los 11 temas. Estado al 15/11/2026:
+Rúbrica del proyecto final (S18), criterio «Integración continua, entrega continua y plataformas en la nube», 10 puntos si están los 11 temas. Estado al 16/11/2026:
 
 | N.º | Tema | Dónde está | Estado |
 |-----|------|------------|--------|
-| 1 | Configuración de CI con GitHub Actions o similar | Punto 5: Jenkins y `ci.yml` | Archivos listos; falta levantar y configurar Jenkins |
-| 2 | Automatización de pruebas o construcción | Etapas Build y Test; 46 pruebas del ERP y verificación de la tienda | Listo, probado en local |
-| 3 | Ejemplo de workflow en `.github/workflows/` | `.github/workflows/ci.yml` | Archivo listo; todavía no se ha subido ni ejecutado |
-| 4 | Captura del pipeline ejecutado | Evidencias 16, 17 y 19 | Falta: el pipeline aún no se ha ejecutado |
-| 5 | Configuración del pipeline para deploy automático | Punto 6: etapa Deploy | Archivo listo; faltan el token y las credenciales en Jenkins |
-| 6 | Captura del despliegue automático tras un merge a main | Evidencias 21, 22 y 23 | Falta |
+| 1 | Configuración de CI con GitHub Actions o similar | Punto 5: Jenkins y `ci.yml` | Hecho: Jenkins configurado y workflow activo. Falta el webhook |
+| 2 | Automatización de pruebas o construcción | Etapas Build y Test; 46 pruebas del ERP y verificación de la tienda | Hecho: pasan en Jenkins y en GitHub Actions |
+| 3 | Ejemplo de workflow en `.github/workflows/` | `.github/workflows/ci.yml` | Hecho: en `main`, con ejecuciones en verde |
+| 4 | Captura del pipeline ejecutado | Evidencias 16, 17 y 19 | Pipeline ejecutado; falta tomar las capturas |
+| 5 | Configuración del pipeline para deploy automático | Punto 6: etapa Deploy | Hecho: token y dos identificadores en Jenkins Credentials |
+| 6 | Captura del despliegue automático tras un merge a main | Evidencias 21, 22 y 23 | Despliegue hecho tras el pull request #39; falta tomar las capturas |
 | 7 | Beneficios de CI/CD | Punto 9 y wiki CI/CD | Listo |
-| 8 | Plataforma de alojamiento | Punto 7: Vercel | Falta crear el proyecto en Vercel |
-| 9 | Plataformas de soporte, nube y contenedores (Docker) | Jenkins en Docker: `jenkins/` | Contenedor `jbl-jenkins` encendido; falta configurar el job |
-| 10 | Proceso de despliegue | Wiki Despliegue y punto 6 | Documentado; todavía no se ha ejecutado |
-| 11 | Enlace al proyecto desplegado | [EDITAR] en Home, Despliegue y README | Falta, sale de Vercel |
+| 8 | Plataforma de alojamiento | Punto 7: Vercel | Hecho: proyecto `jbl-web` |
+| 9 | Plataformas de soporte, nube y contenedores (Docker) | Jenkins en Docker: `jenkins/` | Hecho: contenedor `jbl-jenkins` con el job `jbl-web` |
+| 10 | Proceso de despliegue | Wiki Despliegue y punto 6 | Documentado y ejecutado |
+| 11 | Enlace al proyecto desplegado | https://jbl-web-ebon.vercel.app | Hecho |
 
 Herramientas en la computadora del equipo:
 
@@ -1010,10 +1010,10 @@ Herramientas en la computadora del equipo:
 |-------------|--------|
 | Docker Desktop | Instalado y funcionando; Jenkins encendido en el contenedor `jbl-jenkins` |
 | WSL 2 | Instalado |
-| CLI de Vercel | Instalada (versión 65.16.0). Falta `vercel login` y `vercel link` |
+| CLI de Vercel | Instalada (versión 65.16.0), con sesión iniciada y el proyecto enlazado |
 | ngrok | Instalado. Falta registrar el token de la cuenta y abrir el túnel |
-| Jenkins | Sin configurar: falta levantar el contenedor, crear las credenciales y el job |
+| Jenkins | Configurado: job `jbl-web`, tres credenciales de Vercel y dos ejecuciones en verde |
 | Webhook de GitHub | Sin crear |
-| Proyecto de Vercel | Sin crear |
+| Proyecto de Vercel | Creado: https://jbl-web-ebon.vercel.app |
 
-Criterio «Seguimiento de incidentes», 3 puntos si están los 3 temas: uso de GitHub Issues (punto 4), issue reportado y resuelto (#26 y #27, con su solución ya escrita; se cierran al fusionar en `main`) y vinculación entre issue y commit o pull request (`Closes #n`, Anexo A).
+Criterio «Seguimiento de incidentes», 3 puntos si están los 3 temas: uso de GitHub Issues (punto 4), issue reportado y resuelto (#26 y #27, cerrados al fusionar el pull request #39 en `main`) y vinculación entre issue y commit o pull request (`Closes #n`, Anexo A).
