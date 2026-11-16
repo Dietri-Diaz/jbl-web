@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Catálogo — JBL Store</title>
+  <meta name="description" content="Catálogo de la tienda de demostración JBL: filtra por categoría, precio y disponibilidad.">
+  <meta name="theme-color" content="#0a0a0b">
+
+  <link rel="icon" href="assets/img/logo-jbl.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="data/catalogo.js"></script>
+  <script src="js/tienda.js"></script>
+</head>
+<body>
+
+<script>JBL.cabecera();</script>
+
+<main id="contenido">
+
+  <header class="pagina-cab">
+    <div class="contenedor">
+      <nav class="miga" aria-label="Ruta">
+        <a href="index.html">Inicio</a><span aria-hidden="true">/</span><span aria-current="page">Catálogo</span>
+      </nav>
+      <h1 class="titulo" data-titulo>Catálogo</h1>
+      <p class="bajada" data-bajada>Todos los productos de la tienda.</p>
+    </div>
+  </header>
+
+  <div class="contenedor catalogo">
+
+    <!-- ============ FILTROS ============ -->
+    <form class="filtros" id="filtros" aria-label="Filtros del catálogo">
+      <fieldset class="filtros__grupo">
+        <legend class="filtros__titulo">Categoría</legend>
+        <div class="filtros__lista" data-filtro-categorias></div>
+      </fieldset>
+
+      <fieldset class="filtros__grupo">
+        <legend class="filtros__titulo">Precio máximo</legend>
+        <div class="rango">
+          <label class="sr-only" for="precio">Precio máximo</label>
+          <input id="precio" name="precio" type="range" min="0" max="100" step="10">
+          <output for="precio" data-precio-texto></output>
+        </div>
+      </fieldset>
+
+      <fieldset class="filtros__grupo">
+        <legend class="filtros__titulo">Mostrar solo</legend>
+        <div class="filtros__lista">
+          <label class="opcion"><input type="checkbox" name="oferta" value="1"><span>En oferta</span><span data-cuenta-oferta></span></label>
+          <label class="opcion"><input type="checkbox" name="stock" value="1"><span>Con stock</span><span data-cuenta-stock></span></label>
+          <label class="opcion"><input type="checkbox" name="resistencia" value="1"><span>Resistentes al agua</span><span data-cuenta-resistencia></span></label>
+        </div>
+      </fieldset>
+
+      <button class="boton boton--linea boton--chico" type="reset">Limpiar filtros</button>
+      <button class="boton boton--oscuro boton--chico filtros-abrir" type="button" data-cerrar-todo>Ver resultados</button>
+    </form>
+
+    <!-- ============ RESULTADOS ============ -->
+    <section aria-label="Productos">
+      <div class="barra-cat">
+        <p class="barra-cat__cuenta" data-cuenta aria-live="polite"></p>
+        <div class="barra-cat__orden">
+          <button class="boton boton--linea boton--chico filtros-abrir" type="button" data-filtros-abrir>
+            <svg class="ico" aria-hidden="true"><use href="#i-filtros"/></svg> Filtros
+          </button>
+          <label class="sr-only" for="orden">Ordenar por</label>
+          <select id="orden" name="orden" form="filtros">
+            <option value="">Recomendados</option>
+            <option value="precio-asc">Precio: menor a mayor</option>
+            <option value="precio-desc">Precio: mayor a menor</option>
+            <option value="descuento">Mayor descuento</option>
+            <option value="nombre">Nombre A–Z</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="chips" data-chips></div>
+      <div class="rejilla-prod rejilla-prod--3" data-resultados></div>
+      <div class="vacio" data-vacio hidden>
+        <p class="vacio__titulo">Nada con esos filtros</p>
+        <p>Prueba con otra categoría, sube el precio máximo o quita algún filtro.</p>
+        <button class="boton boton--oscuro" type="reset" form="filtros">Limpiar filtros</button>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<script>JBL.pie();</script>
+<script src="js/catalogo.js"></script>
+
+</body>
+</html>

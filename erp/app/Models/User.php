@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,37 +12,49 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
+    protected $fillable = ['name', 'email', 'password', 'rol', 'activo', 'ultimo_ingreso'];
+
+    protected $hidden = ['password', 'remember_token'];
+
+    // Un usuario nuevo es administrador y está activo salvo que se indique otra cosa.
+    protected $attributes = [
+        'rol' => 'admin',
+        'activo' => true,
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
+            'ultimo_ingreso' => 'datetime',
             'password' => 'hashed',
+            'activo' => 'boolean',
         ];
+    }
+
+    public function nombreRol(): string
+    {
+        return config("tienda.roles.{$this->rol}", $this->rol);
+    }
+
+    /** El administrador gestiona usuarios y ve la bitácora. */
+    public function esAdmin(): bool
+    {
+        return $this->rol === 'admin';
+    }
+
+    /** Administradores y editores pueden crear, editar y eliminar. */
+    public function puedeEditar(): bool
+    {
+        return in_array($this->rol, ['admin', 'editor'], true);
+    }
+
+    /** Iniciales para el avatar: "Ana Torres" -> "AT". */
+    public function iniciales(): string
+    {
+        $partes = preg_split('/\s+/', trim($this->name)) ?: [];
+        $letras = mb_substr($partes[0] ?? '', 0, 1).mb_substr($partes[1] ?? '', 0, 1);
+
+        return mb_strtoupper($letras ?: '?');
     }
 }
